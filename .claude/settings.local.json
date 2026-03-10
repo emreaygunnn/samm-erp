@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/Users/EMRE/Desktop/samm_erp/typescript_calisma && npm run migrate 2>&1)",
+      "Bash(true:*)",
+      "Bash(head:*)",
+      "Bash(python:*)",
+      "Bash(cd \"C:\\\\Users\\\\EMRE\\\\Desktop\\\\samm_erp\\\\typescript_calisma\" && npm run seed 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\EMRE\\\\Desktop\\\\samm_erp\\\\typescript_calisma\" && npx tsc --noEmit 2>&1)",
+      "Bash(tail:*)",
+      "Bash(cd \"C:\\\\Users\\\\EMRE\\\\Desktop\\\\samm_erp\\\\frontend-app\" && npx tsc --noEmit 2>&1)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/EMRE/Desktop/samm_erp/typescript_calisma && npx tsc --noEmit 2>&1)",
+      "Bash(cd /c/Users/EMRE/Desktop/samm_erp/typescript_calisma && npm run seed 2>&1)",
+      "Bash(cd /c/Users/EMRE/Desktop/samm_erp/typescript_calisma && npm run hashSifreleri 2>&1)"
+    ]
+  }
+}

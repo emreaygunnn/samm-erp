@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="http://samm-erp.local/roller"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://samm-erp.local/roller"
+  name="RolService">
+
+  <!-- ========== TIPLER ========== -->
+  <types>
+    <xsd:schema targetNamespace="http://samm-erp.local/roller">
+
+      <!-- TumRolleriGetir -->
+      <xsd:element name="TumRolleriGetirRequest">
+        <xsd:complexType><xsd:sequence/></xsd:complexType>
+      </xsd:element>
+      <xsd:element name="TumRolleriGetirResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="durum"  type="xsd:string"/>
+            <xsd:element name="roller" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- RolGetir -->
+      <xsd:element name="RolGetirRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="id" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RolGetirResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="durum"   type="xsd:string"/>
+            <xsd:element name="id"      type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ad"      type="xsd:string" minOccurs="0"/>
+            <xsd:element name="yetkiler" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="mesaj"   type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- RolEkle -->
+      <xsd:element name="RolEkleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token"   type="xsd:string"/>
+            <xsd:element name="ad"      type="xsd:string"/>
+            <xsd:element name="yetkiler" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RolEkleResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="durum" type="xsd:string"/>
+            <xsd:element name="mesaj" type="xsd:string"/>
+            <xsd:element name="id"    type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- RolGuncelle -->
+      <xsd:element name="RolGuncelleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token"    type="xsd:string"/>
+            <xsd:element name="id"       type="xsd:string"/>
+            <xsd:element name="yetkiler" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RolGuncelleResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="durum" type="xsd:string"/>
+            <xsd:element name="mesaj" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- RolSil -->
+      <xsd:element name="RolSilRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+            <xsd:element name="id"    type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RolSilResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="durum" type="xsd:string"/>
+            <xsd:element name="mesaj" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+  </types>
+
+  <!-- ========== MESAJLAR ========== -->
+  <message name="TumRolleriGetirSorusu">
+    <part name="parameters" element="tns:TumRolleriGetirRequest"/>
+  </message>
+  <message name="TumRolleriGetirCevabi">
+    <part name="parameters" element="tns:TumRolleriGetirResponse"/>
+  </message>
+
+  <message name="RolGetirSorusu">
+    <part name="parameters" element="tns:RolGetirRequest"/>
+  </message>
+  <message name="RolGetirCevabi">
+    <part name="parameters" element="tns:RolGetirResponse"/>
+  </message>
+
+  <message name="RolEkleSorusu">
+    <part name="parameters" element="tns:RolEkleRequest"/>
+  </message>
+  <message name="RolEkleCevabi">
+    <part name="parameters" element="tns:RolEkleResponse"/>
+  </message>
+
+  <message name="RolGuncelleSorusu">
+    <part name="parameters" element="tns:RolGuncelleRequest"/>
+  </message>
+  <message name="RolGuncelleCevabi">
+    <part name="parameters" element="tns:RolGuncelleResponse"/>
+  </message>
+
+  <message name="RolSilSorusu">
+    <part name="parameters" element="tns:RolSilRequest"/>
+  </message>
+  <message name="RolSilCevabi">
+    <part name="parameters" element="tns:RolSilResponse"/>
+  </message>
+
+  <!-- ========== PORT TYPE (operasyonlar) ========== -->
+  <portType name="RolServicePortType">
+    <operation name="TumRolleriGetir">
+      <input  message="tns:TumRolleriGetirSorusu"/>
+      <output message="tns:TumRolleriGetirCevabi"/>
+    </operation>
+    <operation name="RolGetir">
+      <input  message="tns:RolGetirSorusu"/>
+      <output message="tns:RolGetirCevabi"/>
+    </operation>
+    <operation name="RolEkle">
+      <input  message="tns:RolEkleSorusu"/>
+      <output message="tns:RolEkleCevabi"/>
+    </operation>
+    <operation name="RolGuncelle">
+      <input  message="tns:RolGuncelleSorusu"/>
+      <output message="tns:RolGuncelleCevabi"/>
+    </operation>
+    <operation name="RolSil">
+      <input  message="tns:RolSilSorusu"/>
+      <output message="tns:RolSilCevabi"/>
+    </operation>
+  </portType>
+
+  <!-- ========== BINDING (SOAP protokolü) ========== -->
+  <binding name="RolServiceBinding" type="tns:RolServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <operation name="TumRolleriGetir">
+      <soap:operation soapAction="TumRolleriGetir"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="RolGetir">
+      <soap:operation soapAction="RolGetir"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="RolEkle">
+      <soap:operation soapAction="RolEkle"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="RolGuncelle">
+      <soap:operation soapAction="RolGuncelle"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="RolSil">
+      <soap:operation soapAction="RolSil"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+  </binding>
+
+  <!-- ========== SERVICE ========== -->
+  <service name="RolService">
+    <port name="RolServicePort" binding="tns:RolServiceBinding">
+      <soap:address location="http://localhost:3000/soap/roller"/>
+    </port>
+  </service>
+
+</definitions>
