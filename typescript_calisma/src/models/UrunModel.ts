@@ -7,6 +7,7 @@ const urunSchema = new mongoose.Schema(
     stok: { type: Number, required: true, default: 0 },
     kategori: { type: String, required: true },
     ebat: { type: String },
+    lokasyon: { type: String, default: "" },
   },
   { toJSON: { virtuals: true } },
 );

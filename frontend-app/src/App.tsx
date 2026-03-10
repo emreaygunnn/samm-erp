@@ -8,6 +8,8 @@ import SiparislerPage from './pages/SiparislerPage';
 import KullanicilarPage from './pages/KullanicilarPage';
 import RollerPage from './pages/RollerPage';
 import SifreDegistirPage from './pages/SifreDegistirPage';
+import UrunGuncellePage from './pages/UrunGuncellePage';
+import TestPage from './pages/TestPage';
 
 function App() {
   const { token, user } = useAuth();
@@ -61,6 +63,8 @@ function App() {
             <Route path="/siparisler" element={<SiparislerPage />} />
             <Route path="/kullanicilar" element={<KullanicilarPage />} />
             <Route path="/roller" element={<RollerPage />} />
+            <Route path="/urun-guncelle" element={<UrunGuncellePage />} />
+            <Route path="/test" element={<TestPage />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
