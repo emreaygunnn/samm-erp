@@ -40,7 +40,7 @@ export default function OperationSelector({ value, onChange }: Props) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
-    };
+    };  
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);

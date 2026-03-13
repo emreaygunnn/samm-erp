@@ -5,11 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --import ts-node/register src/index.ts",
-    "start": "node --import ts-node/register src/index.ts",
-    "migrate": "node --import ts-node/register src/migrate.ts",
-    "seed": "node --import ts-node/register src/seed.ts",
-    "hashSifreleri": "node --import ts-node/register src/hashSifreleri.ts"
+    "dev": "node --import ts-node/register --import tsconfig-paths/register.js src/index.ts",
+    "start": "node --import ts-node/register --import tsconfig-paths/register.js src/index.ts",
+    "migrate": "node --import ts-node/register --import tsconfig-paths/register.js src/migrate.ts",
+    "seed": "node --import ts-node/register --import tsconfig-paths/register.js src/seed.ts",
+    "hashSifreleri": "node --import ts-node/register --import tsconfig-paths/register.js src/hashSifreleri.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.2.3",
-    "@types/soap": "^0.18.0"
+    "@types/soap": "^0.18.0",
+    "tsconfig-paths": "^4.2.0"
   }
 }
