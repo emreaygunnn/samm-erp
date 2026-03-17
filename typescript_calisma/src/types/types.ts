@@ -5,6 +5,7 @@ export interface Urun {
   stok: number;
   kategori: string;
   ebat?: string;
+  lokasyon?: string; // Oracle'daki lokasyon bilgisini de ekleyelim
 }
 
 export interface Kullanici {

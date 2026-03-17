@@ -13,6 +13,7 @@ import { rolSoapService } from "./soap/RolSoapService.ts";
 import cors from "cors";
 import mongoose from "mongoose";
 import "./models/RolModel.ts";
+import { connectToOracle } from "./config/database.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,11 +28,14 @@ const mongoURI =
 mongoose
   .connect(mongoURI.replace("<db_password>", "emre1905gs"))
   .then(() => console.log(" veritabanına BAĞLANDIK!"))
-  .catch((err) => console.log("Tüh, bağlanamadık: ", err));
+  .catch((err) => console.log(" bağlanamadık: ", err));
 
 mongoose.connection.on("connected", () => {
   console.log(" sipariş bekliyoruz!");
 });
+connectToOracle()
+  .then(() => console.log("Oracle'a BAĞLANDIK!"))
+  .catch((err) => console.error("Oracle bağlanamadık:", err));
 
 dotenv.config();
 const app = express();

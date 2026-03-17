@@ -8,7 +8,8 @@ export interface UpdateItem {
 }
 
 interface Props {
-  envId: string;
+  title?: string;   
+  envId: string;                  
   onEnvIdChange: (v: string) => void;
   items: UpdateItem[];
   onItemsChange: (items: UpdateItem[]) => void;
@@ -41,6 +42,7 @@ function dedupeItems(items: UpdateItem[]): UpdateItem[] {
 }
 
 export default function ItemIdInput({
+  title = 'ID Listesi', 
   envId,
   onEnvIdChange,
   items,
@@ -115,7 +117,7 @@ export default function ItemIdInput({
           marginBottom: 14,
         }}
       >
-        Ürün ID Listesi
+        {title}
       </h3>
 
       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>

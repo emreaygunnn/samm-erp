@@ -1,22 +1,18 @@
-import { oracleConfig } from "./config.ts"; //oracle buraya çek
+import oracledb from "oracledb";
+import { oracleConfig } from "./config.ts";
 
 // Oracle veritabanına bağlanmak için gerekli olan modülü içe aktar
+let pool: oracledb.Pool;
+
 export async function connectToOracle() {
-  console.log("--------------------");
-  console.log(
-    `'${oracleConfig.user} kullanıcısı ile Oracle veritabanına bağlanılıyor...'`,
-  );
+  pool = await oracledb.createPool({
+    user: oracleConfig.user,
+    password: oracleConfig.password,
+    connectString: oracleConfig.connectString,
+  });
+  console.log("Oracle bağlantı havuzu oluşturuldu.");
+}
 
-  //zamanaşımı
-  await new Promise((resolve) => setTimeout(resolve, 2000)); //2 saniye bekle
-  // normalde burada oracle veritabanına bağlanma kodları olur
-
-  const connectionSuccess = true; //bağlantının başarılı olduğunu varsayıyoruz
-
-  if (connectionSuccess) {
-    console.log("Oracle veritabanına başarıyla bağlanıldı!");
-    return true;
-  } else {
-    throw new Error("Oracle veritabanına bağlanırken bir hata oluştu!");
-  }
+export async function getConnection() {
+  return await pool.getConnection();
 }

@@ -1,7 +1,9 @@
 import type { Request, Response } from "express";
 import { UrunService } from "../services/UrunService.ts";
+import { OracleUrunService } from "../services/Oracleurunservice.ts";
 
 const urunService = new UrunService();
+const oracleService = new OracleUrunService();
 
 export class UrunController {
   public async getTumUrunler(req: Request, res: Response) {
@@ -77,6 +79,28 @@ export class UrunController {
       res.json({ success: true, ...sonuc });
     } catch (err: any) {
       res.status(500).json({ message: err.message });
+    }
+  }
+  public async lokasyonGuncelle(req: Request, res: Response) {
+    try {
+      const { lokasyon } = req.body;
+      if (!lokasyon) {
+        res.status(400).send("lokasyon gerekli");
+        return;
+      }
+
+      // 1. MongoDB'de güncelle
+      const urun = await urunService.urunGuncelleKismi(String(req.params.id), {
+        lokasyon,
+      });
+
+      // 2. Oracle'da güncelle
+      await oracleService.lokasyonGuncelle(urun.ad, lokasyon);
+      // urun.ad yerine iki sistemi bağlayan gerçek alan ne ise onu koy
+
+      res.json(urun);
+    } catch (err: any) {
+      res.status(500).send(err.message);
     }
   }
 }

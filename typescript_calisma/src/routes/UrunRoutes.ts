@@ -18,6 +18,11 @@ router.post(
   controller.topluIcerAktar,
 );
 router.put("/:id", yetkiKontrol("urun:yazma"), controller.urunGuncelleTam);
+router.patch(
+  "/:id/lokasyon",
+  yetkiKontrol("urun:yazma"),
+  controller.lokasyonGuncelle,
+);
 router.patch("/:id", yetkiKontrol("urun:yazma"), controller.urunGuncelleKismi);
 router.delete("/:id", yetkiKontrol("urun:silme"), controller.urunSil);
 
