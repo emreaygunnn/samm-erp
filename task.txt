@@ -1,0 +1,10 @@
+frontend
+1- bulkUpdate() fonksiyonunun gönderdiği kısmı gözden geçir, sadeleştir.
+2- bulkUpdate() fonksiyonunda tek tek istek atma tüm id ve karşılık gelen değerleri tek istekte gönder.
+
+backend
+1- isteği karşıladığında artık id ve değerler toplu gelebildiği için buna uygun olmalı ve tek tek her id ve value için oracle isteğini çalıştırtmalı. URUNCONTROLLER
+
+genel
+1- .gitignore ve .env kısımlarını çöz.
+2- fonksiyon isimleri vs. düzenle.

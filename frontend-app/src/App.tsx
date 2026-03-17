@@ -1,15 +1,9 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
-import Sidebar from './components/Sidebar';
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import UrunlerPage from './pages/UrunlerPage';
-import SiparislerPage from './pages/SiparislerPage';
-import KullanicilarPage from './pages/KullanicilarPage';
-import RollerPage from './pages/RollerPage';
-import SifreDegistirPage from './pages/SifreDegistirPage';
-import UrunGuncellePage from './pages/UrunGuncellePage';
-import TestPage from './pages/TestPage';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import Sidebar from "./components/Sidebar";
+import LoginPage from "./pages/LoginPage";
+import UrunGuncellePage from "./pages/UrunGuncellePage";
+import TestPage from "./pages/TestPage";
 
 function App() {
   const { token, user } = useAuth();
@@ -20,16 +14,6 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
-
-  // İlk girişte şifre değişikliği zorunluysa → sifre-degistir sayfasına kilitle
-  if (user?.sifreDegistirmesiGerekiyor) {
-    return (
-      <Routes>
-        <Route path="/sifre-degistir" element={<SifreDegistirPage />} />
-        <Route path="*" element={<Navigate to="/sifre-degistir" replace />} />
       </Routes>
     );
   }
@@ -51,22 +35,23 @@ function App() {
               </div>
               <div className="user-info">
                 <span className="user-name">{user?.kullanici}</span>
-                <span className="user-role">{user?.rol}</span>
               </div>
             </div>
           </div>
         </header>
         <div className="page-body">
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/urunler" element={<UrunlerPage />} />
-            <Route path="/siparisler" element={<SiparislerPage />} />
-            <Route path="/kullanicilar" element={<KullanicilarPage />} />
-            <Route path="/roller" element={<RollerPage />} />
+            <Route path="/" element={<UrunGuncellePage />} />
             <Route path="/urun-guncelle" element={<UrunGuncellePage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
-            <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
+            <Route
+              path="/login"
+              element={<Navigate to="/urun-guncelle" replace />}
+            />
+            <Route
+              path="*"
+              element={<Navigate to="/urun-guncelle" replace />}
+            />
           </Routes>
         </div>
       </div>
@@ -75,4 +60,3 @@ function App() {
 }
 
 export default App;
-

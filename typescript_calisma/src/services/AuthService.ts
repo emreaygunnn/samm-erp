@@ -1,12 +1,5 @@
 import jwt from "jsonwebtoken";
 
-const TUM_YETKILER = [
-  "urun:okuma",
-  "urun:yazma",
-  "urun:silme",
-  "kullanici:okuma",
-];
-
 interface EnvKullanici {
   id: string;
   email: string;
@@ -40,7 +33,6 @@ export class AuthService {
       id: kullanici.id,
       kullanici: kullanici.ad,
       rol: "admin",
-      yetkiler: TUM_YETKILER,
       ogrenciNo: null,
       sifreDegistirmesiGerekiyor: false,
     };
@@ -50,7 +42,7 @@ export class AuthService {
   public async login(email: string, sifre: string): Promise<string | null> {
     const kullanicilar = envKullanicilariGetir();
     const kullanici = kullanicilar.find(
-      (k) => k.email === email && k.password === sifre,
+      (k) => k.email === email && k.password === sifre
     );
     if (!kullanici) return null;
     return this.tokenOlustur(kullanici);

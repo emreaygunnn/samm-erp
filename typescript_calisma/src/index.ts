@@ -1,42 +1,21 @@
+import cors from "cors";
 import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
 import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import soap from "soap";
-import urunRoutes from "./routes/UrunRoutes.ts";
-import kullaniciRoutes from "./routes/KullaniciRoutes.ts";
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/AuthRoutes.ts";
-import siparisRoutes from "./routes/SiparisRoutes.ts";
-import rolRoutes from "./routes/RolRoutes.ts";
+import urunRoutes from "./routes/UrunRoutes.ts";
 import { rolSoapService } from "./soap/RolSoapService.ts";
-import cors from "cors";
-import mongoose from "mongoose";
-import "./models/RolModel.ts";
-import { connectToOracle } from "./config/database.ts";
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const wsdlIcerik = readFileSync(
   join(__dirname, "soap", "roller.wsdl"),
-  "utf-8",
+  "utf-8"
 );
-
-const mongoURI =
-  "mongodb+srv://emreaygun:<db_password>@cluster0.wanf2b3.mongodb.net/?appName=Cluster0";
-
-mongoose
-  .connect(mongoURI.replace("<db_password>", "emre1905gs"))
-  .then(() => console.log(" veritabanına BAĞLANDIK!"))
-  .catch((err) => console.log(" bağlanamadık: ", err));
-
-mongoose.connection.on("connected", () => {
-  console.log(" sipariş bekliyoruz!");
-});
-connectToOracle()
-  .then(() => console.log("Oracle'a BAĞLANDIK!"))
-  .catch((err) => console.error("Oracle bağlanamadık:", err));
 
 const app = express();
 app.use(cors());
@@ -47,9 +26,6 @@ app.use(express.json());
 // ROTALARI BAĞLA (MOUNTING ROUTES)
 app.use("/auther", authRoutes); // Giriş işlemleri: http://localhost:3000/auther/login
 app.use("/urunler", urunRoutes); // Ürün işlemleri: http://localhost:3000/urunler
-app.use("/kullanicilar", kullaniciRoutes); // Kullanıcı işlemleri: http://localhost:3000/kullanicilar
-app.use("/siparisler", siparisRoutes);
-app.use("/roller", rolRoutes);
 
 const PORT = process.env.PORT || 3000;
 
