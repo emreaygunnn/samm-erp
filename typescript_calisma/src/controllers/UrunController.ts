@@ -59,7 +59,7 @@ export class UrunController {
   public async urunGuncelleKismi(req: Request, res: Response) {
     try {
       res.json(
-        await urunService.urunGuncelleKismi(String(req.params.id), req.body),
+        await oracleService.alanGuncelle(String(req.params.id), req.body),
       );
     } catch (err: any) {
       res.status(404).send(err.message);
@@ -89,16 +89,12 @@ export class UrunController {
         return;
       }
 
-      // 1. MongoDB'de güncelle
-      const urun = await urunService.urunGuncelleKismi(String(req.params.id), {
+      const sonuc = await oracleService.lokasyonGuncelle(
+        String(req.params.id),
         lokasyon,
-      });
+      );
 
-      // 2. Oracle'da güncelle
-      await oracleService.lokasyonGuncelle(urun.ad, lokasyon);
-      // urun.ad yerine iki sistemi bağlayan gerçek alan ne ise onu koy
-
-      res.json(urun);
+      res.json(sonuc);
     } catch (err: any) {
       res.status(500).send(err.message);
     }

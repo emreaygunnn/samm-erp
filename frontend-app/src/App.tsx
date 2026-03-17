@@ -65,8 +65,8 @@ function App() {
             <Route path="/roller" element={<RollerPage />} />
             <Route path="/urun-guncelle" element={<UrunGuncellePage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
+            <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>
         </div>
       </div>

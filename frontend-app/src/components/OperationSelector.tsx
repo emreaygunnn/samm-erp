@@ -11,12 +11,7 @@ interface Option {
 const SECENEKLER: Option[] = [
   { value: 'lokasyon',   label: 'Lokasyon Güncelle',    group: 'Items'             },
   { value: 'stok',       label: 'Stok Güncelle',        group: 'Items'             },
-  { value: 'fiyat',      label: 'Fiyat Güncelle',       group: 'Items'             },
-  { value: 'durum',      label: 'Durum Güncelle',       group: 'Items'             },
-  { value: 'tutar',      label: 'Tutar Güncelle',       group: 'Standard Receipts' },
-  { value: 'paraBirimi', label: 'Para Birimi Güncelle', group: 'Standard Receipts' },
-  { value: 'kur',        label: 'Kur Güncelle',         group: 'Currency Rates'    },
-  { value: 'fatura',     label: 'Fatura Güncelle',      group: 'Invoices'          },
+
 ];
 
 // Grupları sırayla al (tekrarsız)

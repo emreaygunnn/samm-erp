@@ -1,5 +1,6 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -37,7 +38,6 @@ connectToOracle()
   .then(() => console.log("Oracle'a BAĞLANDIK!"))
   .catch((err) => console.error("Oracle bağlanamadık:", err));
 
-dotenv.config();
 const app = express();
 app.use(cors());
 

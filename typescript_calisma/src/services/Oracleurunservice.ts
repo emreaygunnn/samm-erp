@@ -1,32 +1,54 @@
 import { getConnection } from "../config/database.ts";
 
+// NOT: Aşağıdaki değerleri kendi Oracle şemanla eşleştir:
+//   TABLO_ADI      → Oracle'daki gerçek tablo adı     (örn: URUNLER, STK_URUN vs.)
+//   ID_SUTUNU      → Ürünü tanımlayan sütun adı       (örn: PRODUCT_CODE, URUN_ID vs.)
+//   IZINLI_SUTUNLAR → Frontend alan adı → Oracle sütun adı eşleşmesi
+const TABLO_ADI = "PRODUCTS";
+const ID_SUTUNU = "PRODUCT_CODE";
+const IZINLI_SUTUNLAR: Record<string, string> = {
+  lokasyon: "LOCATION",
+  stok: "STOCK",
+};
+
 export class OracleUrunService {
   /**
-   * Oracle'daki ürünün lokasyonunu günceller.
-   *
-   * NOT: Şirketin Oracle tablosundaki gerçek tablo ve sütun adlarını
-   * buraya yazman lazım. Aşağıdakiler örnek:
-   *   - Tablo adı: PRODUCTS (gerçek adı farklı olabilir)
-   *   - Lokasyon sütunu: LOCATION (gerçek adı farklı olabilir)
-   *   - Eşleştirme sütunu: PRODUCT_CODE (iki sistemi bağlayan alan)
+   * Ürünün bir veya birden fazla alanını Oracle'da günceller.
+   * Desteklenen alanlar: lokasyon, stok
    */
-  public async lokasyonGuncelle(eslesmeKodu: string, lokasyon: string) {
+  public async alanGuncelle(id: string, alanlar: Record<string, any>) {
     const conn = await getConnection();
     try {
+      const setClauses: string[] = [];
+      const binds: Record<string, any> = { id };
+
+      for (const [alan, deger] of Object.entries(alanlar)) {
+        const sutun = IZINLI_SUTUNLAR[alan];
+        if (!sutun) continue;
+        setClauses.push(`${sutun} = :${alan}`);
+        binds[alan] = deger;
+      }
+
+      if (setClauses.length === 0)
+        throw new Error("Güncellenecek geçerli alan bulunamadı!");
+
       const result = await conn.execute(
-        `UPDATE PRODUCTS SET LOCATION = :lokasyon WHERE PRODUCT_CODE = :kod`,
-        { lokasyon, kod: eslesmeKodu },
+        `UPDATE ${TABLO_ADI} SET ${setClauses.join(", ")} WHERE ${ID_SUTUNU} = :id`,
+        binds,
         { autoCommit: true },
       );
 
-      if (result.rowsAffected === 0) {
-        throw new Error(`Oracle'da "${eslesmeKodu}" kodlu ürün bulunamadı!`);
-      }
+      if (result.rowsAffected === 0)
+        throw new Error(`Oracle'da "${id}" kodlu ürün bulunamadı!`);
 
-      return { eslesmeKodu, lokasyon, rowsAffected: result.rowsAffected };
+      return { id, ...alanlar, rowsAffected: result.rowsAffected };
     } finally {
       await conn.close();
     }
+  }
+
+  public async lokasyonGuncelle(eslesmeKodu: string, lokasyon: string) {
+    return this.alanGuncelle(eslesmeKodu, { lokasyon });
   }
 
   /**

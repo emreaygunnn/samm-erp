@@ -107,7 +107,7 @@ export default function Sidebar() {
     ];
 
     const groups: NavGroup[] = [
-        { key: 'erp',    title: 'ERP',                icon: <Database size={11} />,  items: erpItems    },
+        // { key: 'erp',    title: 'ERP',                icon: <Database size={11} />,  items: erpItems    },
         { key: 'oracle', title: 'Oracle Entegrasyon', icon: <Plug size={11} />,      items: oracleItems },
     ];
 
