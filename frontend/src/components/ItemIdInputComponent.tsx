@@ -94,7 +94,7 @@ export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dı
 
   return (
     <div className="card" style={{ padding: "20px 24px" }}>
-      mondial
+      
       <h3
         style={{
           fontSize: 13,
@@ -109,19 +109,7 @@ export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dı
       </h3>
 
       <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-        {/* Env ID */}
-        <div style={{ flexShrink: 0 }}>
-          <label style={{ display: "block", fontSize: 12, color: "var(--text-muted)", marginBottom: 6 }}>
-            Env ID
-          </label>
-          <input
-            className="form-input"
-            style={{ width: 90 }}
-            placeholder="ORG-01"
-            value={envId}
-            onChange={(e) => onEnvIdChange(e.target.value)}
-          />
-        </div>
+        
 
         {/* Textarea */}
         <div style={{ flex: 1 }}>
