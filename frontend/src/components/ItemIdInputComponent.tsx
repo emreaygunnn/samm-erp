@@ -9,7 +9,7 @@ interface Props {
   title?: string;                              // Başlık. ? opsiyonel, varsayılan "ID Listesi"
   envId: string;                               // Ortam ID'si (ORG-01 gibi)
   onEnvIdChange: (v: string) => void;          // Env ID değişince parent'a bildir
-  items: UpdateItem[];                         // Ürün listesi
+  items: UpdateItem[];                         // Ürün listesi güncellenecek olan ürünler (id ve value içerir)
   onItemsChange: (items: UpdateItem[]) => void; // Liste değişince parent'a bildir
   rawText: string;                             // Textarea'daki ham metin
   onRawTextChange: (v: string) => void;        // Metin değişince parent'a bildir
@@ -38,51 +38,51 @@ export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dı
   onItemsChange,
   rawText,
   onRawTextChange,
-}: Props) {
-  const fileRef = useRef<HTMLInputElement>(null);
+}: Props) { 
+  const fileRef = useRef<HTMLInputElement>(null); // Gizli file input'u kontrol etmek için ref. yani fileRef.current ile bu inputa erişebiliriz. Excel yükle butonuna tıklandığında bu inputa tıklanır ve dosya seçme penceresi açılır. Dosya seçildikten sonra handleExcel fonksiyonu çalışır.
 
   // ── Elle yazma ──
   const handleTextChange = (v: string) => {
     onRawTextChange(v);
-    const ids = parseIds(v);
-    const newItems = ids.map((id) => {
-      const existing = items.find((item) => item.id === id);
-      return existing ?? { id, value: "" };
+    const ids = parseIds(v);  
+    const newItems = ids.map((id) => {//daha önce bu id lere karşılık gelen value'ler varsa onları koru, yoksa value boş string olsun
+      const existing = items.find((item) => item.id === id);// existing → mevcut demek 
+      return existing ?? { id, value: "" };// eğer existing varsa onu kullan, yoksa yeni bir item oluştur {id: id, value: ""} şeklinde
     }); 
     onItemsChange(dedupeItems(newItems));
   };
 
   // ── Excel / CSV yüklenince ──
   // A sütunu = ID, B sütunu = Değer
-  const handleExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    e.target.value = "";
+  const handleExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {// Excel dosyası seçildikten sonra çalışır. Dosyayı okuyup ID ve değerleri çıkarır, mevcut listeye ekler ve parent'a bildirir.
+    const file = e.target.files?.[0];// file inputundan seçilen dosyayı alır. [0] ilk dosyayı alır çünkü tek dosya seçmeye izin veriyoruz birden fazla dosya seçilmesi halinde
+    if (!file) return; // dosya seçilmediyse çık aşağıdaki kodları çalıştırma
+    e.target.value = ""; //burada aslında value ları sıfırlıyoruz çünkü aynı dosyayı tekrar yüklersek tarayıcı aynı dosya seçili der ve onChange tetiklenmez
 
-    const buffer = await file.arrayBuffer();
-    const wb = XLSX.read(buffer);
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const rows: (string | number | null | undefined)[][] = XLSX.utils.sheet_to_json(ws, { header: 1 });
+    const buffer = await file.arrayBuffer(); // arrayBuffer ile dosyayı okuyup bellekte bir buffer oluştururuz.  Dosyayı ham binary veri olarak oku.
+    const wb = XLSX.read(buffer);// bianry veriyi excel olarak oku 
+    const ws = wb.Sheets[wb.SheetNames[0]]; // ilk sayfayı al. SheetNames → çalışma kitabındaki sayfa isimlerini içeren bir arraydir. [0] ile ilk sayfayı alırız.
+    const rows: (string | number | null | undefined)[][] = XLSX.utils.sheet_to_json(ws, { header: 1 }); // sayfayı satır satır oku. header: 1 → her satırı array olarak döndürür. Yani rows → 2 boyutlu array olur. rows[0] ilk satır, rows[0][0] ilk satırın ilk hücresi (A1), rows[0][1] ilk satırın ikinci hücresi (B1) gibi erişilir. bu şekilde bir javaScript arrayine fönüşürürüz. her hücre string, number, null veya undefined olabilir bu yüzden tip olarak belirttik. satır dizisine çevirir sheet_to_json
 
-    const bulunan: UpdateItem[] = [];
+    const bulunan: UpdateItem[] = []; // Excel'den bulunan ID ve değerler burada tutulacak. UpdateItem → {id: string, value: string | number} şeklinde bir tiptir.
 
-    rows.forEach((row) => {
+    rows.forEach((row) => { //.forEach() → Dizideki her eleman için fonksiyon çalıştır. .map()'ten farkı: .map() yeni dizi döner, .forEach() dönmez — sadece her eleman üzerinde iş yapar.
       const id = String(row[0] ?? "").trim();
-      if (!id) return;
+      if (!id) return; //ıd null veya undefined ise ""
 
       const val =
         row[1] !== undefined && row[1] !== null
           ? typeof row[1] === "number"
-            ? row[1]
-            : String(row[1]).trim()
+            ? row[1]                  //b sütunu varsa sayıysa sayıyı olduğu gibi kullan string ise boşlukları temizle
+            : String(row[1]).trim()   //b sütunu yoksa undefined yada null ise boş string ""
           : "";
 
-      bulunan.push({ id, value: val });
+      bulunan.push({ id, value: val }); // sonra value ve idleri buraya pushla
     });
 
-    const combined = dedupeItems([...items, ...bulunan]);
+    const combined = dedupeItems([...items, ...bulunan]); // mevcut liste ile bulunanları birleştir ve aynı ID'leri sil. aynı ıd ler varsa son geleni kullanır çünkü dedupeItems içinde Map kullanıyoruz ve Map'te aynı key varsa son eklenen value'yu tutar.
     onItemsChange(combined);
-    onRawTextChange(combined.map((item) => item.id).join("\n"));
+    onRawTextChange(combined.map((item) => item.id).join("\n"));// textarea'daki metni güncelle. sadece ID'leri gösterelim, değerleri göstermeyelim. her ID yeni satırda olacak şekilde join("\n") ile birleştiriyoruz.
   };
 
   // ── Tek bir item'ı sil ──

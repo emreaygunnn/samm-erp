@@ -11,7 +11,11 @@ interface Props {
 }
 
 const SITUATION_OPTIONS: Record<ProductUpdatableArea,{label:string; type: 'text' |'number' | 'select' ; placeholder?: string }> = {
-location: {label:"Lokasyon", type:"text", placeholder:"Yeni lokasyon girin"},
+location: {label:"Lokasyon", type:"text", placeholder:"Yeni lokasyon girin"},/* Record<ProductUpdatableArea, ...> → Her operasyon için ayar tanımla.
+                                                                                Her ayar üç şey tutuyor:
+                                                                                label → Tablo başlığında ne yazsın? "Stok" veya "Lokasyon"
+                                                                                type → Input tipi. "number" olursa sadece sayı girilebilir, "text" olursa her şey
+                                                                                placeholder → Input boşken görünen soluk yazı*/
 stock: {label:"Stok", type:"number", placeholder:"Yeni stok adedi girin"}
 }
 
@@ -24,18 +28,18 @@ const[bulkValue,setBulkValue] =useState("");
 // ── Tek bir item'ın değerini güncelle ──
 const handleItemValueChange = (id: string, newValue: string | number) => {
     const updated = items.map((item) => 
-      item.id === id ? { ...item, value: newValue } : item
+      item.id === id ? { ...item, value: newValue } : item //{ ...item, value: newValue } → Item'ın tüm alanlarını kopyala (id, value) ama value'yu yeni değerle değiştir. : → Hayırsa şunu yap:item → Olduğu gibi bırak, dokunma.                                               
     );
     onItemsChange(updated);
-  };    
+  };      
 
 // // ── Tüm item'lara aynı değeri yaz ──
 const handleHandleApply= () => {
     if (bulkValue === '') return;
-    const updated = items.map((item) => ({ ...item, value: bulkValue }));
+    const updated = items.map((item) => ({ ...item, value: bulkValue }));//Üstteki fonksiyonda item.id === id ? kontrolü vardı — sadece bir tanesini değiştiriyordu. Burada kontrol yok — HERKESE aynı değeri yaz.
     onItemsChange(updated);
   };
-
+    
   // ── "Tümüne Uygula" satırı için input ──
   const renderBulkInput = () => {
     if (cfg.type === 'select') {

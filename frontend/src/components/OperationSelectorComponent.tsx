@@ -4,7 +4,7 @@ import type { ProductUpdatableArea } from '@shared/types/product';
 
 interface Option {
   value: ProductUpdatableArea;
-  label: string;
+  label: string;   // kullanıcının gördüğü metin  
   group: string;
 }   
 
@@ -18,12 +18,12 @@ const OPTIONS : Option[] =[
 
 const GROUPS = Array.from(new Set(OPTIONS.map((o) => o.group))); // options içindeki grupları al tekrarları sil ve array yap
 
-interface Props{//props:fonksiyonlara dışarıdan veri aktarmak için kullanılır
-    value: ProductUpdatableArea | null;
-    onChange: (op:ProductUpdatableArea)=>void; // onChange = seçilen değeri yukarı (parent component(ÜRÜNGÜNCELLEPAGE)) yollayacak fonksiyon
+interface Props{//props:fonksiyonlara dışarıdan verilen emirler ve bilgiler paketi.
+    value: ProductUpdatableArea | null;// mevcut seçili olan değer hangisi (dışarıdan gelir)
+    onChange: (op:ProductUpdatableArea)=>void; // onChange = seçilen değeri yukarı (parent component(ÜRÜNGÜNCELLEPAGE)) yollayacak fonksiyon - void çünkü geri cevap beklemiyor 
 
 
-}
+} 
 
 export  default function OpeationSelector({value,onChange}:Props){
   const [open,setOpen]=useState(false);// dropdown menü açık mı kapalı mı kapalı olsun

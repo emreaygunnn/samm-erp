@@ -9,8 +9,8 @@ interface Props {
 export default function ResultLog({ results, loading }: Props) {
   if (results.length === 0 && !loading) return null;
 
-  const basarili = results.filter((r) => r.success).length;
-  const hata = results.filter((r) => !r.success).length;
+  const basarili = results.filter((r) => r.success).length;// sonuçlar içinde success olanların sayısı
+  const hata = results.filter((r) => !r.success).length;// sonuçlar içinde success olmayanların sayısı
 
   return (
     <div className="card" style={{ padding: '20px 24px' }}>

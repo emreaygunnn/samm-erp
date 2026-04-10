@@ -17,7 +17,7 @@ export default function ProductUpdatePage() {
 
   const handleOperationChange = (op: ProductUpdatableArea) => {
     setOperation(op);
-    setItems((prev) => prev.map((item) => ({ ...item, value: '' })));
+    setItems((prev) => prev.map((item) => ({ ...item, value: '' })));// önceki değerler varsa sıfırlar
   };  
   
   const allValuesFilled = items.length > 0 && items.every(
@@ -28,20 +28,20 @@ export default function ProductUpdatePage() {
     if (!operation || items.length === 0) return;
     if (!allValuesFilled) return;
 
-    setResults([]);
-    setLoading(true);
+    setResults([]);// önceki sonuçları temizle
+    setLoading(true);// buton kilitlenir ve spinner gösterilir
 
     try {
         const payload = items.map(item => ({
             id: item.id,
             [operation]: item.value,
         }));
-        const res = await api.patch('/products/bulk', payload);
-        setResults(res.data);
+        const res = await api.patch('/products/bulk', payload); // axios ile backend'e PATCH isteği gönderilir. payload → [{id: '123', stock: 50}, {id: '456', stock: 30}] gibi bir array olur. operation değişkenine göre stock veya location alanı gelir.
+        setResults(res.data); // sonuçlar satet yazılır
     } catch (err: any) {
         setResults([{ id: '-', success: false, message: err.message }]);
     } finally {
-        setLoading(false);
+        setLoading(false); // spinner durur buton açılır
     }
   };
 
