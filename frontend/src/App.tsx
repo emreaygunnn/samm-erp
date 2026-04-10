@@ -7,6 +7,8 @@ import {Routes,Route,Navigate} from "react-router-dom"; // Routes → Route'lar�
 import {useAuth} from  "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
+import Sidebar from "./components/SideBarComponent";
+import TestPage from "./pages/TestPage";""
 
 function App(){
   const { token, user, logout } = useAuth();
@@ -23,6 +25,7 @@ function App(){
   // Giriş yapılmışsa → tam layout
   return (
     <div className="layout">
+       <Sidebar />     
       
       <div className="main-content">
         <header className="header">
@@ -39,18 +42,13 @@ function App(){
                 <span className="user-name">{user?.user}</span>
               </div>
             </div>
-            <button 
-              className="btn btn-secondary" 
-              onClick={logout}
-              style={{ color: '#ef4444' }}
-            >
-              Çıkış Yap
-            </button>
+            
           </div>
         </header>
         <div className="page-body"> 
           <Routes>
             <Route path="/urun-guncelle" element={<UpdateProductPage />} />
+            <Route path="/test" element={<TestPage />} />
             <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />// login sayfasına gelirse urun-guncelle sayfasına yönlendirir
             <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />// her hangi bir url girilirse urun-guncelle sayfasına yönlendirir
           </Routes>

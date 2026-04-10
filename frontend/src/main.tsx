@@ -7,8 +7,8 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <BrowserRouter> //url yönetimi için
-            <AuthProvider> //kullanıcı oturum bilgisini tüm uygulamaya dağıtmak için
+        <BrowserRouter>
+            <AuthProvider> 
                 <App />
             </AuthProvider>
         </BrowserRouter>
