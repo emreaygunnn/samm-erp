@@ -4,21 +4,23 @@ import { AuthService } from "../service/AuthService.js"; // token kontrolü içi
 const authService = new AuthService();
 
 export const securityMiddleware = (
-    req: Request,
-    res: Response,
-    next: NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
-    const ticket = req.headers["authorization"];// http isteğinin header kısmından authorization bilgisini alır authorization:"Bearer <token>" şeklinde gelir
-    if (!ticket) return res.status(403).send("Biletin yok, giremezsin!");
+  console.log("Security middleware çalıştı, token kontrol ediliyor...");
 
-    const token = ticket.split(" ")[1];// Bearer <token> kısmından tokenı alır
-    if (!token) return res.status(403).send("Biletin yok , giremezsin!");
-    const verification = authService.CheckTicket(token); // tokenı doğrular
-    // verification payload döndürür yada null payload döndürüyorsa yani null değilse 
-    if (verification) {
-        (req as any).user = verification;
-        next();
-    } else {
-        res.status(401).send("Biletin sahte veya süresi dolmuş!");
-    }
+  const ticket = req.headers["authorization"]; // http isteğinin header kısmından authorization bilgisini alır authorization:"Bearer <token>" şeklinde gelir
+  if (!ticket) return res.status(403).send("Biletin yok, giremezsin!");
+
+  const token = ticket.split(" ")[1]; // Bearer <token> kısmından tokenı alır
+  if (!token) return res.status(403).send("Biletin yok , giremezsin!");
+  const verification = authService.CheckTicket(token); // tokenı doğrular
+  // verification payload döndürür yada null payload döndürüyorsa yani null değilse
+  if (verification) {
+    (req as any).user = verification;
+    next();
+  } else {
+    res.status(401).send("Biletin sahte veya süresi dolmuş!");
+  }
 };

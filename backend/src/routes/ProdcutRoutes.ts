@@ -8,7 +8,8 @@ const productController = new ProductController();
 router.use(securityMiddleware); //tüm ürün istekleri token kontrolünden geçer
 
 router.patch("/:id", (req, res) => productController.updateProduct(req, res));
-router.patch("/bulk", (req, res) => productController.bulkUpdate(req, res));
+router.post("/bulk", (req, res) => {
+  productController.bulkUpdate(req, res);
+});
 
 export default router;
-

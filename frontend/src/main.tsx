@@ -5,7 +5,6 @@ import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 import "./index.css";
 
-<<<<<<< Updated upstream
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -17,14 +16,3 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 
 //asdasdasddasd
-=======
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <BrowserRouter> 
-            <AuthProvider> 
-                <App />
-            </AuthProvider>
-        </BrowserRouter>    
-    </React.StrictMode>
-);
->>>>>>> Stashed changes
