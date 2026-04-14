@@ -62,7 +62,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
                                 className="form-input"
                                 style={{ paddingLeft: 38 }}
                                 type="email"
-                                placeholder="emre@example.com"
+                                placeholder="example@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required

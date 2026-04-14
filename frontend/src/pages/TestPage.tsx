@@ -21,6 +21,10 @@ export default function TestPage() {
                 value={operation}
                 onChange={setOperation}
             />
+            <div style={{ height: '20px' }} /> {/* Boşluk için */}
+
+
+
 
             <ItemIdInputComponent
                 envId={envId}
