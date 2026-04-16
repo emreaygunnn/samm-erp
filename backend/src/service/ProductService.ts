@@ -1,8 +1,6 @@
-import oracledb from "oracledb";
-import { oracleConfig } from "../config/config.js";
 import type { UpdateResult } from "@shared/types/product.ts";
 import { getItem } from "../utils/getItem.js";
-import { updateDescription } from "src/utils/updateDescription.js";
+import { updateItem } from "../utils/updateDescription.js";
 
 // oracle tablo adları
 const TABLE_NAME = "PRODUCTS";
@@ -12,11 +10,11 @@ const COLUMNS = {
   location: "LOCATION",
 };
 
-// FRONTEND DEN GELEN ALAN ADI  ORACLE TABLO ALAN ADI EŞLEŞMESİ
-// Sadece izin verilen alanlar ö
-const ALLOWED_COLUMNS: Record<string, string> = {
-  stock: COLUMNS.stock,
-  location: COLUMNS.location,
+// FRONTEND DEN GELEN ALAN ADI  ORACLE API ALAN ADI EŞLEŞMESİ
+// Sadece izin verilen alanlar
+const ALLOWED_API_FIELDS: Record<string, string> = {
+  stock: "Stock", // frontend 'stock' → Oracle API 'Stock'
+  location: "Location", // frontend 'location' → Oracle API 'Location'
 };
 
 // güncelleme sonucu değerler
@@ -29,19 +27,40 @@ export class ProductService {
 
   public async updateProduct(
     id: string,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Promise<UpdateResult> {
     const itemUniqId = await getItem("ItemNumber", id);
 
     if (itemUniqId) {
       console.log(`Item ${id} exists in Oracle with unique ID: ${itemUniqId}`);
 
-      const updated = await updateDescription(itemUniqId, fields.description);
+      // fields'tan güncellenecek alanı bul (stock veya location) aynı anda olamaz
+      const fieldKeys = Object.keys(fields);
+      if (fieldKeys.length !== 1) {
+        return {
+          id,
+          success: false,
+          message: "Sadece bir alan güncellenebilir ",
+        };
+      }
+
+      const frontendField = fieldKeys[0] as string;
+      const apiField = ALLOWED_API_FIELDS[frontendField];
+      if (!apiField) {
+        return {
+          id,
+          success: false,
+          message: `Geçersiz alan: ${frontendField}`,
+        };
+      }
+
+      const value = fields[frontendField];
+      const updated = await updateItem(itemUniqId, apiField, value);
       if (updated) {
         return {
           id,
           success: true,
-          message: `${id} başarıyla güncellendi`,
+          message: `${id}  güncellendi`,
         };
       } else {
         return {
@@ -55,34 +74,32 @@ export class ProductService {
       return {
         id,
         success: false,
-        message: `${id} başarıyla güncellenemedi`,
+        message: `${id}  güncellenemedi`,
       };
     }
   }
-  // toplu güncelleme
+  // toplu güncelleme - paralel olarak çalıştır
 
   public async bulkUpdate(
-    items: Array<{ id: string; [key: string]: any }>
+    items: Array<{ id: string; [key: string]: any }>,
   ): Promise<UpdateResult[]> {
-    //Array<{ id: string; [key: string]: any }> → "Her elemanında id olan bir dizi" demek. [key: string]: any ise "id dışında başka alanlar da olabilir, ne gelirse gelsin" diyor.
-    //Promise<UpdateResult[]> → Her ürün için bir sonuç döner:
-
-    const results: UpdateResult[] = []; // her ürünün sonucunu buraya toplayacağız
-    for (const item of items) {
-      // dizideki her ürünü tek tek al
-      const { id, ...fields } = item; // id yi ayır kalanını fields e at
-
+    // Tüm ürünleri paralel olarak işle
+    const promises = items.map(async (item) => {
+      const { id, ...fields } = item;
       try {
-        const result = await this.updateProduct(id, fields); // tekli güncelleme metodunu çağır zaten oracle bağlantısını o hallediyor
-        results.push(result); // sonucu results arrayine ekle
+        const result = await this.updateProduct(id, fields);
+        return result;
       } catch (err) {
-        results.push({
+        return {
           id,
           success: false,
           message: (err as Error).message,
-        });
+        };
       }
-    }
+    });
+
+    // Tüm promise'leri bekle ve sonuçları döndür
+    const results = await Promise.all(promises);
     return results;
   }
 }

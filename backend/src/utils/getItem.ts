@@ -17,7 +17,8 @@ export const getItem = async (key: string, value: string) => {
     }
 
     const selfLink = res.data.items[0].links.find(
-      (link: any) => link.rel === "self"
+      // .links ile her ürün obajesi içerisine array koyar
+      (link: any) => link.rel === "self",
     ).href;
 
     const urlParts = selfLink.split("/");

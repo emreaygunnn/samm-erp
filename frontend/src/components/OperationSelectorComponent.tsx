@@ -10,7 +10,8 @@ interface Option {
 
 const OPTIONS : Option[] =[
     {value:"stock", label: 'stok güncelle', group:'items'}, // buradak group dropdown menüde başlık olarak gözükür
-    {value: 'location', label:'lokasyon güncelle', group:'items'},// value = backendde kullanacağımız alan adı, label = frontendde gözükecek alan adı, group = dropdown menüde başlık olarak gözükür
+    {value: 'location', label:'lokasyon güncelle', group:'items'},
+     {value: 'test', label:'üç tane seçilecek alan olacak', group:'items'},// value = backendde kullanacağımız alan adı, label = frontendde gözükecek alan adı, group = dropdown menüde başlık olarak gözükür
 
 ]
 

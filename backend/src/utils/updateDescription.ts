@@ -2,9 +2,10 @@ import axios from "axios";
 import { oracleConfig } from "../config/config.js";
 import getToken from "./getToken.js";
 
-export const updateDescription = async (
+export const updateItem = async (
   uniqId: string,
-  itemDescription: string
+  field: string, // dinamik alan adı (stock veya location)
+  value: string | number, //
 ) => {
   try {
     const token = getToken();
@@ -13,7 +14,7 @@ export const updateDescription = async (
     };
 
     let data = {
-      ItemDescription: itemDescription,
+      [field]: value,
     };
 
     const res = await axios.patch(`${oracleConfig.item}/${uniqId}`, data, {
@@ -22,7 +23,7 @@ export const updateDescription = async (
 
     return true;
   } catch (err: any) {
-    console.log("Error updating description:", err.message);
+    console.log(`Error updating ${field}:`, err.message);
     return false;
   }
 };

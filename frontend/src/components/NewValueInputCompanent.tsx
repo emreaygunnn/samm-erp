@@ -16,7 +16,8 @@ location: {label:"Lokasyon", type:"text", placeholder:"Yeni lokasyon girin"},/* 
                                                                                 label → Tablo başlığında ne yazsın? "Stok" veya "Lokasyon"
                                                                                 type → Input tipi. "number" olursa sadece sayı girilebilir, "text" olursa her şey
                                                                                 placeholder → Input boşken görünen soluk yazı*/
-stock: {label:"Stok", type:"number", placeholder:"Yeni stok adedi girin"}
+stock: {label:"Stok", type:"number", placeholder:"Yeni stok adedi girin"},
+test: {label:"Test", type:"text", placeholder:"Yeni test değeri girin"}
 }
 
 
