@@ -13,7 +13,6 @@ import { api } from "../api";
 
 export default function ProductUpdatePage() {
   const [operation, setOperation] = useState<ProductUpdatableArea | null>(null);
-  const [envId, setEnvId] = useState("");
   const [items, setItems] = useState<UpdateItem[]>([]);
   const [rawText, setRawText] = useState("");
   const [results, setResults] = useState<UpdateResult[]>([]);
@@ -24,12 +23,25 @@ export default function ProductUpdatePage() {
     setItems((prev) => prev.map((item) => ({ ...item, value: "" }))); // önceki değerler varsa sıfırlar
   };
 
-  const allValuesFilled =
-    items.length > 0 &&
-    items.every(
-      (item) =>
-        item.value !== "" && item.value !== undefined && item.value !== null
+  const isDescriptionItemFilled = (item: UpdateItem) => {
+    const selected = item.selectedDescriptions;
+    const values = item.descriptionValues;
+
+    if (!selected || !values) return false;
+
+    return (['a', 'b', 'c'] as const).some(
+      (key) => selected[key] && values[key].trim() !== ''
     );
+  };
+
+  const allValuesFilled = // tüm item'ların değerlerinin dolu olup olmadığını kontrol eder
+    items.length > 0 &&
+    items.every((item) => {
+      if (operation === 'description') {
+        return isDescriptionItemFilled(item);
+      }
+      return item.value !== '' && item.value !== undefined && item.value !== null;
+    });
 
   const handleUpdate = async () => {
     if (!operation || items.length === 0) return;
@@ -39,10 +51,24 @@ export default function ProductUpdatePage() {
     setLoading(true); // buton kilitlenir ve spinner gösterilir
 
     try {
-      const payload = items.map((item) => ({
-        id: item.id,
-        [operation]: item.value,
-      }));
+      const payload = items.map((item) => {
+        if (operation === 'description') {
+          // Açıklama için özel payload
+          const data: any = { id: item.id };
+          if (item.selectedDescriptions && item.descriptionValues) {
+            if (item.selectedDescriptions.a) data.descriptionA = item.descriptionValues.a;
+            if (item.selectedDescriptions.b) data.descriptionB = item.descriptionValues.b;
+            if (item.selectedDescriptions.c) data.descriptionC = item.descriptionValues.c;
+          }
+          return data;
+        } else {
+          // Normal payload
+          return {
+            id: item.id,
+            [operation]: item.value,
+          };
+        }
+      });
       console.log("Gönderilen payload:", payload);
 
       const res = await api.post("/product/bulk", payload); // axios ile backend'e PATCH isteği gönderilir. payload → [{id: '123', stock: 50}, {id: '456', stock: 30}] gibi bir array olur. operation değişkenine göre stock veya location alanı gelir.
@@ -72,8 +98,6 @@ export default function ProductUpdatePage() {
         <OperationSelector value={operation} onChange={handleOperationChange} />
 
         <ItemIdInput
-          envId={envId}
-          onEnvIdChange={setEnvId}
           items={items}
           onItemsChange={setItems}
           rawText={rawText}

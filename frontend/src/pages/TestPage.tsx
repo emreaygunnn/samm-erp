@@ -27,8 +27,7 @@ export default function TestPage() {
 
 
             <ItemIdInputComponent
-                envId={envId}
-                onEnvIdChange={setEnvId}
+              
                 items={items}
                 onItemsChange={setItems}
                 rawText={rawText}

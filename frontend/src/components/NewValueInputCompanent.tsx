@@ -17,7 +17,7 @@ location: {label:"Lokasyon", type:"text", placeholder:"Yeni lokasyon girin"},/* 
                                                                                 type → Input tipi. "number" olursa sadece sayı girilebilir, "text" olursa her şey
                                                                                 placeholder → Input boşken görünen soluk yazı*/
 stock: {label:"Stok", type:"number", placeholder:"Yeni stok adedi girin"},
-test: {label:"Test", type:"text", placeholder:"Yeni test değeri girin"}
+description: {label:"Açıklama", type:"text", placeholder:"Yeni açıklama girin"},
 }
 
 
@@ -29,15 +29,32 @@ const[bulkValue,setBulkValue] =useState("");
 // ── Tek bir item'ın değerini güncelle ──
 const handleItemValueChange = (id: string, newValue: string | number) => {
     const updated = items.map((item) => 
-      item.id === id ? { ...item, value: newValue } : item //{ ...item, value: newValue } → Item'ın tüm alanlarını kopyala (id, value) ama value'yu yeni değerle değiştir. : → Hayırsa şunu yap:item → Olduğu gibi bırak, dokunma.                                               
+      item.id === id ? { ...item, value: newValue } : item
     );
     onItemsChange(updated);
-  };      
+  };
 
-// // ── Tüm item'lara aynı değeri yaz ──
+// ── Açıklama için checkbox ve değer güncelle ──
+const handleDescriptionChange = (id: string, key: 'a' | 'b' | 'c', checked: boolean, value: string) => {
+    const updated = items.map((item) => {
+      if (item.id === id) {
+        const selectedDescriptions = item.selectedDescriptions || { a: false, b: false, c: false };
+        const descriptionValues = item.descriptionValues || { a: '', b: '', c: '' };
+        return {
+          ...item,
+          selectedDescriptions: { ...selectedDescriptions, [key]: checked },
+          descriptionValues: { ...descriptionValues, [key]: value },
+        };
+      }
+      return item;
+    });
+    onItemsChange(updated);
+  };
+
+// // ── Tümüne Uygula ──
 const handleHandleApply= () => {
     if (bulkValue === '') return;
-    const updated = items.map((item) => ({ ...item, value: bulkValue }));//Üstteki fonksiyonda item.id === id ? kontrolü vardı — sadece bir tanesini değiştiriyordu. Burada kontrol yok — HERKESE aynı değeri yaz.
+    const updated = items.map((item) => ({ ...item, value: bulkValue }));
     onItemsChange(updated);
   };
     
@@ -77,6 +94,37 @@ const handleHandleApply= () => {
 
   // ── Tek satır için input — her item kendi değerini okur ──
   const renderInput = (item: UpdateItem) => {
+    if (operation === 'description') {
+      // Açıklama için özel UI
+      const selected = item.selectedDescriptions || { a: false, b: false, c: false };
+      const values = item.descriptionValues || { a: '', b: '', c: '' };
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {(['a', 'b', 'c'] as const).map((key) => (
+            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input
+                type="checkbox"
+                checked={selected[key]}
+                onChange={(e) => handleDescriptionChange(item.id, key, e.target.checked, values[key])}
+              />
+              <label style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase' }}>
+                {key.toUpperCase()}
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                placeholder={`Açıklama ${key.toUpperCase()} için yeni değer`}
+                value={values[key]}
+                onChange={(e) => handleDescriptionChange(item.id, key, selected[key], e.target.value)}
+                disabled={!selected[key]}
+                style={{ flex: 1 }}
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     const val = String(item.value ?? '');
     return (
       <input

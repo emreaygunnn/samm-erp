@@ -15,6 +15,9 @@ const COLUMNS = {
 const ALLOWED_API_FIELDS: Record<string, string> = {
   stock: "Stock", // frontend 'stock' → Oracle API 'Stock'
   location: "Location", // frontend 'location' → Oracle API 'Location'
+  descriptionA: "DescriptionA", // açıklama A
+  descriptionB: "DescriptionB", // açıklama B
+  descriptionC: "DescriptionC", // açıklama C
 };
 
 // güncelleme sonucu değerler
@@ -34,41 +37,44 @@ export class ProductService {
     if (itemUniqId) {
       console.log(`Item ${id} exists in Oracle with unique ID: ${itemUniqId}`);
 
-      // fields'tan güncellenecek alanı bul (stock veya location) aynı anda olamaz
+      // fields'tan güncellenecek alanları bul (stock, location, descriptionA, B, C)
       const fieldKeys = Object.keys(fields);
-      if (fieldKeys.length !== 1) {
+      if (fieldKeys.length === 0) {
         return {
           id,
           success: false,
-          message: "Sadece bir alan güncellenebilir ",
+          message: "Güncellenecek alan bulunamadı",
         };
       }
 
-      const frontendField = fieldKeys[0] as string;
-      const apiField = ALLOWED_API_FIELDS[frontendField];
-      if (!apiField) {
-        return {
-          id,
-          success: false,
-          message: `Geçersiz alan: ${frontendField}`,
-        };
+      // Her alan için güncelleme yap
+      const results: string[] = [];
+      for (const frontendField of fieldKeys) {
+        const apiField = ALLOWED_API_FIELDS[frontendField];
+        if (!apiField) {
+          results.push(`${frontendField}: Geçersiz alan`);
+          continue;
+        }
+
+        const value = fields[frontendField];
+        const updated = await updateItem(itemUniqId, apiField, value);
+        if (updated) {
+          results.push(`${frontendField}: Başarılı`);
+        } else {
+          results.push(`${frontendField}: Hata`);
+        }
       }
 
-      const value = fields[frontendField];
-      const updated = await updateItem(itemUniqId, apiField, value);
-      if (updated) {
-        return {
-          id,
-          success: true,
-          message: `${id}  güncellendi`,
-        };
-      } else {
-        return {
-          id,
-          success: false,
-          message: `${id} güncellenirken bir hata oluştu`,
-        };
-      }
+      const successCount = results.filter((r) => r.includes("Başarılı")).length;
+      const hasErrors = results.some(
+        (r) => r.includes("Hata") || r.includes("Geçersiz"),
+      );
+
+      return {
+        id,
+        success: !hasErrors && successCount > 0,
+        message: results.join(", "),
+      };
     } else {
       console.log(`Item ${id} does not exist in Oracle.`);
       return {

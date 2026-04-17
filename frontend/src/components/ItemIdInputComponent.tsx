@@ -7,8 +7,6 @@ import type { UpdateItem } from '@shared/types/product';
 // Parent component'ten gelen props
 interface Props {
   title?: string;                              // Başlık. ? opsiyonel, varsayılan "ID Listesi"
-  envId: string;                               // Ortam ID'si (ORG-01 gibi)
-  onEnvIdChange: (v: string) => void;          // Env ID değişince parent'a bildir
   items: UpdateItem[];                         // Ürün listesi güncellenecek olan ürünler (id ve value içerir)
   onItemsChange: (items: UpdateItem[]) => void; // Liste değişince parent'a bildir
   rawText: string;                             // Textarea'daki ham metin
@@ -32,8 +30,6 @@ function dedupeItems(items: UpdateItem[]): UpdateItem[] {// dedupeItems → Ayn�
 
 export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dışarıdan veri aktarmak için kullanılır
   title = "ID Listesi",
-  envId,
-  onEnvIdChange,
   items,
   onItemsChange,
   rawText,

@@ -11,8 +11,7 @@ interface Option {
 const OPTIONS : Option[] =[
     {value:"stock", label: 'stok güncelle', group:'items'}, // buradak group dropdown menüde başlık olarak gözükür
     {value: 'location', label:'lokasyon güncelle', group:'items'},
-     {value: 'test', label:'üç tane seçilecek alan olacak', group:'items'},// value = backendde kullanacağımız alan adı, label = frontendde gözükecek alan adı, group = dropdown menüde başlık olarak gözükür
-
+    {value: 'description', label:'açıklama güncelle', group:'items'}, // yeni açıklama seçeneği
 ]
 
 // grupları sırayla al
@@ -64,7 +63,7 @@ export  default function OpeationSelector({value,onChange}:Props){
             padding: '9px 14px',
             borderRadius: 8,
             border: open
-              ? '1.5px solid var(--accent)'
+              ? '1.5px solid var(--accent)' 
               : '1.5px solid var(--border)',
             background: 'var(--surface)',
             color: selected ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -100,7 +99,7 @@ export  default function OpeationSelector({value,onChange}:Props){
               left: 0,
               right: 0,
               zIndex: 50,
-              background: 'var(--surface)',
+              background: 'black',
               border: '1.5px solid var(--border)',
               borderRadius: 10,
               boxShadow: '0 8px 24px rgba(0,0,0,0.35)',

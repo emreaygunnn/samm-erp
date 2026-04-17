@@ -6,13 +6,14 @@ export interface Product {
   category: string;
   dimensions?: string;
   location: string;
+  description?: string;
 }
 
 // güncellenebilir alanlar
 export const PRODUCT_AREA_TYPES = {
   stock: "number",
   location: "string",
-  test: "string",
+  description: "string",
 } as const; //değerler tam literal tiplere dönüşür, yani "string" | "number"
 
 export type ProductUpdatableArea = keyof typeof PRODUCT_AREA_TYPES;
@@ -23,6 +24,9 @@ export interface UpdateItem {
   //güncellenecek ürün bilgisi
   id: string;
   value: string | number;
+  // açıklama güncellemesi için
+  selectedDescriptions?: { a: boolean; b: boolean; c: boolean };
+  descriptionValues?: { a: string; b: string; c: string };
 }
 
 export interface UpdateResult {
