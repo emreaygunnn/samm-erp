@@ -3,7 +3,8 @@
 import {Routes,Route,Navigate} from "react-router-dom"; // Routes → Route'ların kabı. İçindeki Route'lara bakıp URL'e göre hangisini göstereceğine karar verir.
                                                        // Route → Tek bir sayfa tanımı. "Bu URL'e gelince bu component'i göster."
                                                        // Navigate → Otomatik yönlendirme. "Buraya geldin ama seni şuraya atıyorum."
-
+import { useTranslation } from 'react-i18next';
+import { Globe } from 'lucide-react';
 import {useAuth} from  "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
@@ -12,6 +13,13 @@ import TestPage from "./pages/TestPage";""
 
 function App(){
   const { token, user, logout } = useAuth();
+  const { i18n, t } = useTranslation();
+
+  const handleLanguageChange = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('language', lng);
+  };
+
   //// Giriş yapılmamışsa → login sayfasına yönlendir
   if(!token){
     return (
@@ -30,16 +38,48 @@ function App(){
       <div className="main-content">
         <header className="header">
           <div className="header-left">
-            <h1>SAMM ERP</h1>
+            <h1>{t('common.appName')}</h1>
             <p>Yönetim Paneli</p>
           </div>
           <div className="header-right">
-            <div className="user-pill">
-              <div className="user-avatar">
-                {user?.user?.charAt(0).toUpperCase()}
+            {/* Dil Seçimi */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '6px 12px',
+                borderRadius: 8,
+                background: 'var(--bg-hover)',
+                border: '1px solid var(--border)',
+              }}>
+                <Globe size={16} color="var(--text-secondary)" />
+                <select
+                  value={i18n.language}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-primary)',
+                    fontSize: 13,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    colorScheme: 'dark',
+                  }}
+                >
+                  <option value="tr">Türkçe</option>
+                  <option value="en">English</option>
+                </select>
               </div>
-              <div className="user-info">
-                <span className="user-name">{user?.user}</span>
+
+              <div className="user-pill">
+                <div className="user-avatar">
+                  {user?.user?.charAt(0).toUpperCase()}
+                </div>
+                <div className="user-info">
+                  <span className="user-name">{user?.user}</span>
+                </div>
               </div>
             </div>
             
@@ -59,5 +99,3 @@ function App(){
 }
 
 export default App;
-
-

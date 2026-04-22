@@ -1,0 +1,61 @@
+{
+  "common": {
+    "appName": "SAMM ERP",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search"
+  },
+  "navigation": {
+    "home": "Home",
+    "login": "Login",
+    "logout": "Logout",
+    "updateProduct": "Product Update",
+    "language": "Language"
+  },
+  "login": {
+    "title": "Admin Panel Login",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In",
+    "invalidCredentials": "Invalid email or password",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required"
+  },
+  "productUpdate": {
+    "title": "Bulk Product Update",
+    "description": "Update multiple products at once",
+    "selectOperation": "Select Operation Type",
+    "selectIds": "ID List",
+    "newValues": "New Values",
+    "updateButton": "Update",
+    "results": "Operation Results",
+    "stock": "Stock",
+    "location": "Location",
+    "description": "Description",
+    "enterNewStock": "Enter new stock quantity",
+    "enterNewLocation": "Enter new location",
+    "enterNewDescription": "Enter new description",
+    "organizationSelect": "— Select Organization —",
+    "organizationA": "Organization A",
+    "organizationB": "Organization B",
+    "organizationC": "Organization C",
+    "descriptionForOrg": "Enter description for selected organization",
+    "applyAll": "Apply to All",
+    "noProducts": "No products found",
+    "successful": "successful",
+    "failed": "failed",
+    "processing": "Processing...",
+    "uploadExcel": "Upload Excel"
+  },
+  "errors": {
+    "networkError": "Network error",
+    "serverError": "Server error",
+    "unauthorized": "Unauthorized access",
+    "notFound": "Not found"
+  }
+}

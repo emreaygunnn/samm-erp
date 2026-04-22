@@ -1,4 +1,5 @@
 import { CheckCircle, XCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { UpdateResult } from '@shared/types/product';
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
 }
 
 export default function ResultLog({ results, loading }: Props) {
+  const { t } = useTranslation();
+  
   if (results.length === 0 && !loading) return null;
 
   const basarili = results.filter((r) => r.success).length;// sonuçlar içinde success olanların sayısı
@@ -16,12 +19,12 @@ export default function ResultLog({ results, loading }: Props) {
     <div className="card" style={{ padding: '20px 24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          İşlem Sonuçları
+          {t('productUpdate.results')}
         </h3>
         {results.length > 0 && (
           <div style={{ display: 'flex', gap: 10, fontSize: 13 }}>
-            <span style={{ color: '#22c55e', fontWeight: 600 }}>✓ {basarili} başarılı</span>
-            {hata > 0 && <span style={{ color: 'var(--danger)', fontWeight: 600 }}>✗ {hata} hata</span>}
+            <span style={{ color: '#22c55e', fontWeight: 600 }}>✓ {basarili} {t('productUpdate.successful')}</span>
+            {hata > 0 && <span style={{ color: 'var(--danger)', fontWeight: 600 }}>✗ {hata} {t('productUpdate.failed')}</span>}
           </div>
         )}
       </div>
@@ -29,7 +32,7 @@ export default function ResultLog({ results, loading }: Props) {
       {loading && results.length === 0 && (
         <div className="loading-page" style={{ padding: '20px 0' }}>
           <div className="spinner" />
-          <span>İşleniyor...</span>
+          <span>{t('productUpdate.processing')}</span>
         </div>
       )}
 
@@ -66,7 +69,7 @@ export default function ResultLog({ results, loading }: Props) {
         {loading && results.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', color: 'var(--text-muted)', fontSize: 13 }}>
             <div className="spinner" style={{ width: 14, height: 14 }} />
-            İşleniyor...
+            {t('productUpdate.processing')}
           </div>
         )}
       </div>

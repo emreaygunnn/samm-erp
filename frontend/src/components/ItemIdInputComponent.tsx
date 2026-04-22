@@ -1,4 +1,5 @@
 import { useRef } from "react"; // useRef → Gizli file input'a erişmek için.
+import { useTranslation } from "react-i18next";
 import * as XLSX from "xlsx"; // excelden veri okumak için
 import { Upload, X } from "lucide-react"; // İkonlar.
 import type { UpdateItem } from '@shared/types/product';
@@ -29,12 +30,15 @@ function dedupeItems(items: UpdateItem[]): UpdateItem[] {// dedupeItems → Ayn�
 }
 
 export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dışarıdan veri aktarmak için kullanılır
-  title = "ID Listesi",
+  title,
   items,
   onItemsChange,
   rawText,
   onRawTextChange,
 }: Props) { 
+  const { t } = useTranslation();
+  const finalTitle = title || t('productUpdate.selectIds');
+  
   const fileRef = useRef<HTMLInputElement>(null); // Gizli file input'u kontrol etmek için ref. yani fileRef.current ile bu inputa erişebiliriz. Excel yükle butonuna tıklandığında bu inputa tıklanır ve dosya seçme penceresi açılır. Dosya seçildikten sonra handleExcel fonksiyonu çalışır.
 
   // ── Elle yazma ──
@@ -101,7 +105,7 @@ export default function ItemIdInputComponent({// bu fonksiyon  fonksiyonlara dı
           marginBottom: 14,
         }}
       >
-        {title}
+        {finalTitle}
       </h3>
 
       <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>

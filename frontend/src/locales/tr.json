@@ -1,0 +1,61 @@
+{
+  "common": {
+    "appName": "SAMM ERP",
+    "loading": "Yükleniyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "search": "Ara"
+  },
+  "navigation": {
+    "home": "Anasayfa",
+    "login": "Giriş",
+    "logout": "Çıkış",
+    "updateProduct": "Ürün Güncelleme",
+    "language": "Dil"
+  },
+  "login": {
+    "title": "Yönetim Paneline Giriş",
+    "email": "E-posta",
+    "password": "Şifre",
+    "signIn": "Giriş Yap",
+    "invalidCredentials": "E-posta veya şifre hatalı",
+    "emailRequired": "E-posta gerekli",
+    "passwordRequired": "Şifre gerekli"
+  },
+  "productUpdate": {
+    "title": "Toplu Ürün Güncelleme",
+    "description": "Birden fazla ürünü aynı anda güncelleyin",
+    "selectOperation": "İşlem Türü Seçiniz",
+    "selectIds": "ID Listesi",
+    "newValues": "Yeni Değerler",
+    "updateButton": "Güncelle",
+    "results": "İşlem Sonuçları",
+    "stock": "Stok",
+    "location": "Lokasyon",
+    "description": "Açıklama",
+    "enterNewStock": "Yeni stok adedi girin",
+    "enterNewLocation": "Yeni lokasyon girin",
+    "enterNewDescription": "Yeni açıklama girin",
+    "organizationSelect": "— Organizasyon Seçiniz —",
+    "organizationA": "Organizasyon A",
+    "organizationB": "Organizasyon B",
+    "organizationC": "Organizasyon C",
+    "descriptionForOrg": "Seçilmiş organizasyon için açıklama girin",
+    "applyAll": "Tümüne Uygula",
+    "noProducts": "Ürün bulunamadı",
+    "successful": "başarılı",
+    "failed": "hata",
+    "processing": "İşleniyor...",
+    "uploadExcel": "Excel Yükle"
+  },
+  "errors": {
+    "networkError": "Ağ hatası",
+    "serverError": "Sunucu hatası",
+    "unauthorized": "Yetkisiz erişim",
+    "notFound": "Bulunamadı"
+  }
+}

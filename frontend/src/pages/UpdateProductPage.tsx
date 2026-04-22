@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import OperationSelector from "../components/OperationSelectorComponent";
 import ItemIdInput from "../components/ItemIdInputComponent";
 import NewValueInput from "../components/NewValueInputCompanent";
@@ -12,6 +13,7 @@ import { RefreshCw } from "lucide-react";
 import { api } from "../api";
 
 export default function ProductUpdatePage() {
+  const { t } = useTranslation();
   const [operation, setOperation] = useState<ProductUpdatableArea | null>(null);
   const [items, setItems] = useState<UpdateItem[]>([]);
   const [rawText, setRawText] = useState("");
@@ -24,14 +26,8 @@ export default function ProductUpdatePage() {
   };
 
   const isDescriptionItemFilled = (item: UpdateItem) => {
-    const selected = item.selectedDescriptions;
-    const values = item.descriptionValues;
-
-    if (!selected || !values) return false;
-
-    return (['a', 'b', 'c'] as const).some(
-      (key) => selected[key] && values[key].trim() !== ''
-    );
+    // organizationCode seçili mi ve description dolu mu
+    return item.organizationCode !== undefined && item.value !== '' && item.value !== undefined && item.value !== null;
   };
 
   const allValuesFilled = // tüm item'ların değerlerinin dolu olup olmadığını kontrol eder
@@ -47,20 +43,21 @@ export default function ProductUpdatePage() {
     if (!operation || items.length === 0) return;
     if (!allValuesFilled) return;
 
+    console.log("[UpdateProductPage] Items state:", items);
+    console.log("[UpdateProductPage] Operation:", operation);
+
     setResults([]); // önceki sonuçları temizle
     setLoading(true); // buton kilitlenir ve spinner gösterilir
 
     try {
       const payload = items.map((item) => {
         if (operation === 'description') {
-          // Açıklama için özel payload
-          const data: any = { id: item.id };
-          if (item.selectedDescriptions && item.descriptionValues) {
-            if (item.selectedDescriptions.a) data.descriptionA = item.descriptionValues.a;
-            if (item.selectedDescriptions.b) data.descriptionB = item.descriptionValues.b;
-            if (item.selectedDescriptions.c) data.descriptionC = item.descriptionValues.c;
-          }
-          return data;
+          // Açıklama için payload - organizationCode + description
+          return {
+            id: item.id,
+            organizationCode: item.organizationCode,
+            description: item.value,
+          };
         } else {
           // Normal payload
           return {
@@ -69,16 +66,21 @@ export default function ProductUpdatePage() {
           };
         }
       });
-      console.log("Gönderilen payload:", payload);
+      console.log("[UpdateProductPage] Gönderilen payload:", payload);
 
-      const res = await api.post("/product/bulk", payload); // axios ile backend'e PATCH isteği gönderilir. payload → [{id: '123', stock: 50}, {id: '456', stock: 30}] gibi bir array olur. operation değişkenine göre stock veya location alanı gelir.
-      console.log("API yanıtı:", res.data);
+      const res = await api.patch("/product/bulk", payload);
+      console.log("[UpdateProductPage] API yanıtı:", res.data);
 
-      setResults(res.data); // sonuçlar satet yazılır
+      // Eğer backend object dönmüşse array'e dönüştür
+      const results = Array.isArray(res.data) ? res.data : [res.data];
+      setResults(results);
+      console.log("[UpdateProductPage] Results state güncelleştirildi");
     } catch (err: any) {
+      console.error("[UpdateProductPage] Hata:", err.message, err);
       setResults([{ id: "-", success: false, message: err.message }]);
     } finally {
-      setLoading(false); // spinner durur buton açılır
+      setLoading(false);
+      console.log("[UpdateProductPage] Loading false ayarlandı");
     }
   };
 
@@ -89,8 +91,8 @@ export default function ProductUpdatePage() {
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">Toplu Ürün Güncelleme</h2>
-          <p className="page-desc">Birden fazla ürünü aynı anda güncelleyin</p>
+          <h2 className="page-title">{t('productUpdate.title')}</h2>
+          <p className="page-desc">{t('productUpdate.description')}</p>
         </div>
       </div>
 
@@ -121,14 +123,14 @@ export default function ProductUpdatePage() {
           >
             {loading ? (
               <>
-                <div className="spinner" /> İşleniyor...
+                <div className="spinner" /> {t('productUpdate.processing')}
               </>
             ) : (
               <>
                 <RefreshCw size={15} />{" "}
                 {items.length > 0
-                  ? `${items.length} Ürün Güncelle`
-                  : "Güncelle"}
+                  ? `${items.length} ${t('productUpdate.updateButton')}`
+                  : t('productUpdate.updateButton')}
               </>
             )}
           </button>

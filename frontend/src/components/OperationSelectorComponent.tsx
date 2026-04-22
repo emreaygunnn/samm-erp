@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import type { ProductUpdatableArea } from '@shared/types/product';
 
@@ -8,16 +9,6 @@ interface Option {
   group: string;
 }   
 
-const OPTIONS : Option[] =[
-    {value:"stock", label: 'stok güncelle', group:'items'}, // buradak group dropdown menüde başlık olarak gözükür
-    {value: 'location', label:'lokasyon güncelle', group:'items'},
-    {value: 'description', label:'açıklama güncelle', group:'items'}, // yeni açıklama seçeneği
-]
-
-// grupları sırayla al
-
-const GROUPS = Array.from(new Set(OPTIONS.map((o) => o.group))); // options içindeki grupları al tekrarları sil ve array yap
-
 interface Props{//props:fonksiyonlara dışarıdan verilen emirler ve bilgiler paketi.
     value: ProductUpdatableArea | null;// mevcut seçili olan değer hangisi (dışarıdan gelir)
     onChange: (op:ProductUpdatableArea)=>void; // onChange = seçilen değeri yukarı (parent component(ÜRÜNGÜNCELLEPAGE)) yollayacak fonksiyon - void çünkü geri cevap beklemiyor 
@@ -26,6 +17,17 @@ interface Props{//props:fonksiyonlara dışarıdan verilen emirler ve bilgiler p
 } 
 
 export  default function OpeationSelector({value,onChange}:Props){
+  const { t } = useTranslation();
+  
+  const OPTIONS : Option[] =[
+    {value:"stock", label: t('productUpdate.stock'), group:'items'},
+    {value: 'location', label: t('productUpdate.location'), group:'items'},
+    {value: 'description', label: t('productUpdate.description'), group:'items'},
+  ]
+
+  // grupları sırayla al
+  const GROUPS = Array.from(new Set(OPTIONS.map((o) => o.group))); // options içindeki grupları al tekrarları sil ve array yap
+
   const [open,setOpen]=useState(false);// dropdown menü açık mı kapalı mı kapalı olsun
   const [hovered,setHovered] = useState <ProductUpdatableArea | null>(null);// Mouse hangi seçeneğin üstünde? Hover efekti için.
   const containerRef = useRef<HTMLDivElement>(null);// dropdown menünün dışına tıklayınca kapanması için
@@ -48,7 +50,7 @@ export  default function OpeationSelector({value,onChange}:Props){
   }; return (
     <div className="card" style={{ padding: '20px 24px' }}>
       <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
-        İşlem Türü
+        {t('operationType')}
       </label>
 
       <div ref={containerRef} style={{ position: 'relative', maxWidth: 360 }}>

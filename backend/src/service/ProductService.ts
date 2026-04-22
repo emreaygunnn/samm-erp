@@ -1,6 +1,6 @@
 import type { UpdateResult } from "@shared/types/product.ts";
 import { getItem } from "../utils/getItem.js";
-import { updateItem } from "../utils/updateDescription.js";
+import { updateItem } from "../utils/updateItems.js";
 
 // oracle tablo adları
 const TABLE_NAME = "PRODUCTS";
@@ -15,9 +15,7 @@ const COLUMNS = {
 const ALLOWED_API_FIELDS: Record<string, string> = {
   stock: "Stock", // frontend 'stock' → Oracle API 'Stock'
   location: "Location", // frontend 'location' → Oracle API 'Location'
-  descriptionA: "DescriptionA", // açıklama A
-  descriptionB: "DescriptionB", // açıklama B
-  descriptionC: "DescriptionC", // açıklama C
+  description: "Description", // açıklama (organizasyon koduna göre güncellenecek)
 };
 
 // güncelleme sonucu değerler
@@ -35,9 +33,11 @@ export class ProductService {
     const itemUniqId = await getItem("ItemNumber", id);
 
     if (itemUniqId) {
-      console.log(`Item ${id} exists in Oracle with unique ID: ${itemUniqId}`);
+      console.log(
+        `[ProductService] Item ${id} exists with unique ID: ${itemUniqId}`,
+      );
 
-      // fields'tan güncellenecek alanları bul (stock, location, descriptionA, B, C)
+      // fields'tan güncellenecek alanları bul (stock, location, description)
       const fieldKeys = Object.keys(fields);
       if (fieldKeys.length === 0) {
         return {
@@ -47,9 +47,16 @@ export class ProductService {
         };
       }
 
+      console.log(
+        `[ProductService] Güncellenecek alanlar: ${fieldKeys.join(", ")}`,
+      );
+
       // Her alan için güncelleme yap
       const results: string[] = [];
       for (const frontendField of fieldKeys) {
+        // organizationCode'u atla, sadece gerçek alanları işle
+        if (frontendField === "organizationCode") continue;
+
         const apiField = ALLOWED_API_FIELDS[frontendField];
         if (!apiField) {
           results.push(`${frontendField}: Geçersiz alan`);
@@ -57,7 +64,18 @@ export class ProductService {
         }
 
         const value = fields[frontendField];
-        const updated = await updateItem(itemUniqId, apiField, value);
+        const organizationCode = fields.organizationCode; // organizationCode'u al
+
+        console.log(
+          `[ProductService] Güncelleniyor: ${frontendField}=${value} (Org: ${organizationCode})`,
+        );
+
+        const updated = await updateItem(
+          itemUniqId,
+          apiField,
+          value,
+          organizationCode,
+        );
         if (updated) {
           results.push(`${frontendField}: Başarılı`);
         } else {
@@ -76,7 +94,7 @@ export class ProductService {
         message: results.join(", "),
       };
     } else {
-      console.log(`Item ${id} does not exist in Oracle.`);
+      console.log(`[ProductService] Item ${id} does not exist in Oracle.`);
       return {
         id,
         success: false,
