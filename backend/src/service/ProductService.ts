@@ -2,14 +2,6 @@ import type { UpdateResult } from "@shared/types/product.ts";
 import { getItem } from "../utils/getItem.js";
 import { updateItem } from "../utils/updateItems.js";
 
-// oracle tablo adları
-const TABLE_NAME = "PRODUCTS";
-const COLUMNS = {
-  id: "ID",
-  stock: "STOCK",
-  location: "LOCATION",
-};
-
 // FRONTEND DEN GELEN ALAN ADI  ORACLE API ALAN ADI EŞLEŞMESİ
 // Sadece izin verilen alanlar
 const ALLOWED_API_FIELDS: Record<string, string> = {

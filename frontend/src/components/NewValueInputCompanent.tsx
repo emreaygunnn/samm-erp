@@ -14,6 +14,7 @@ interface Props {
 export default function NewValueInput({operation,items,onItemsChange}:Props){
     const { t } = useTranslation();
     
+    
     const SITUATION_OPTIONS: Record<ProductUpdatableArea,{label:string; type: 'text' |'number' | 'select' ; placeholder?: string }> = {
         location: {label: t('productUpdate.location'), type:"text", placeholder: t('productUpdate.enterNewLocation')},
         stock: {label: t('productUpdate.stock'), type:"number", placeholder: t('productUpdate.enterNewStock')},
@@ -78,7 +79,7 @@ const handleHandleApply= () => {
       <input
         className="form-input"
         type={cfg.type}
-        placeholder={`Tümüne uygulanacak ${cfg.label.toLowerCase()}...`}
+        placeholder={t('productUpdate.applyAll')}
         value={bulkValue}
         onChange={(e) => setBulkValue(e.target.value)}
         min={cfg.type === 'number' ? 0 : undefined}
@@ -149,11 +150,11 @@ const handleHandleApply= () => {
     <div className="card" style={{ padding: '20px 24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          Yeni Değerler
+          {t('productUpdate.newValues')}
         </h3>
         {doluSayisi > 0 && (
           <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-            {doluSayisi}/{items.length} değer girildi
+            {doluSayisi}/{items.length} {t('productUpdate.valueEntered')}
           </span>
         )}
       </div>
@@ -179,7 +180,7 @@ const handleHandleApply= () => {
           style={{ flexShrink: 0, gap: 6 }}
           title="Girilen değeri tüm satırlara uygula"
         >
-          <CopyCheck size={14} /> Tümüne Uygula
+          <CopyCheck size={14} /> {t('productUpdate.applyToAll')}
         </button>
       </div>
 

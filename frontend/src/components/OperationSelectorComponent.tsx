@@ -78,7 +78,7 @@ export  default function OpeationSelector({value,onChange}:Props){
           <span>
             {selected
               ? <><span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{selected.group} — </span>{selected.label}</>
-              : 'İşlem türü seçiniz...'
+              : t('productUpdate.selectOperation')
             }
           </span>
           <ChevronDown

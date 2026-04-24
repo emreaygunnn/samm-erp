@@ -39,7 +39,7 @@ function App(){
         <header className="header">
           <div className="header-left">
             <h1>{t('common.appName')}</h1>
-            <p>Yönetim Paneli</p>
+            <p>{t('navigation.adminPanel')}</p>
           </div>
           <div className="header-right">
             {/* Dil Seçimi */}
@@ -58,7 +58,7 @@ function App(){
                   value={i18n.language}
                   onChange={(e) => handleLanguageChange(e.target.value)}
                   style={{
-                    background: 'transparent',
+                    background: 'black',
                     border: 'none',
                     color: 'var(--text-primary)',
                     fontSize: 13,
@@ -73,14 +73,7 @@ function App(){
                 </select>
               </div>
 
-              <div className="user-pill">
-                <div className="user-avatar">
-                  {user?.user?.charAt(0).toUpperCase()}
-                </div>
-                <div className="user-info">
-                  <span className="user-name">{user?.user}</span>
-                </div>
-              </div>
+              
             </div>
             
           </div>

@@ -13,10 +13,16 @@
   "navigation": {
     "home": "Home",
     "login": "Login",
-    "logout": "Logout",
+    "logout": "Logout", 
     "updateProduct": "Product Update",
-    "language": "Language"
+    "language": "Language", 
+    "test": "Test",
+    "updateProcesses": "Update Processes",
+    "adminPanel": "Admin Panel",
+    "check": "Check",
+    "crmAccount": "CRM Account"
   },
+  "operationType": "Operation Type",
   "login": {
     "title": "Admin Panel Login",
     "email": "Email",
@@ -50,7 +56,15 @@
     "successful": "successful",
     "failed": "failed",
     "processing": "Processing...",
-    "uploadExcel": "Upload Excel"
+    "uploadExcel": "Upload Excel",
+    "productIds": "Product IDs (separate by line or comma)",
+    "productIdsPlaceholder": "ID-001\nID-002\nor ID-001, ID-002",
+    "uploadExcelHint": "Upload product IDs and values from Excel (Column A: ID, Column B: Value)",
+    "idEntered":" ID entered",
+    "valueMatched": " value matched",
+    "applyToAll": "Apply to All",
+    "valueEntered": " value entered"
+    
   },
   "errors": {
     "networkError": "Network error",

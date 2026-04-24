@@ -1,6 +1,7 @@
 import  { useState } from 'react'; //Menü gruplarının açık/kapalı durumunu tutmak için.
 import { NavLink } from 'react-router-dom'; //NavLink → Normal <a> etiketi gibi ama iki farkı var: sayfa yenilenmeden yönlendirir ve aktif sayfanın linkine otomatik active class'ı ekler. Böylece "şu an hangi sayfadayım" görsel olarak belli olur.
 import {useAuth} from '../context/AuthContext'; //logout fonksiyonunu almak için. Çıkış butonunda kullanılacak.
+import {useTranslation} from 'react-i18next';
 import {
     LogOut,
     Cpu,
@@ -102,23 +103,38 @@ function SidebarGroup({ group }: { group: NavGroup }) {
 
 export default function Sidebar() {
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   const oracleItems: NavItem[] = [
     {
       to: "/urun-guncelle",
       icon: <RefreshCw size={16} />,
-      label: "Ürün Güncelleme",
+      label: t('navigation.updateProduct'),
     },
-    { to: "/test", icon: <FlaskConical size={16} />, label: "Test" },
+    { to: "/test", icon: <FlaskConical size={16} />, label: t('navigation.test') },
   ];
+  const checkItems: NavItem[] = [
+  {
+    to: "/check", // Tıklanınca gideceği URL
+    icon: <Cpu size={16} />, // İstediğin bir ikonu seç
+    label: t('navigation.crmAccount'), // Çeviri dosyasında karşılığını eklemeyi unutma
+  },
+];
 
   const groups: NavGroup[] = [
     {
       key: "oracle",
-      title: "Oracle Entegrasyon",
+      title: t('navigation.updateProcesses'),
       icon: <Plug size={11} />,
       items: oracleItems,
     },
+    {
+    key: "check-group", // Benzersiz bir anahtar
+    title: t('navigation.check'), // Dropdown başlığı
+    icon: <RefreshCw size={11} />, // Yanındaki küçük ikon
+    items: checkItems, // Yukarıda tanımladığımız alt linkler
+  },
+    
   ];
 
   return (
@@ -130,7 +146,7 @@ export default function Sidebar() {
           </div>
           <div className="brand-text">
             <span className="brand-name">SAMM ERP</span>
-            <span className="brand-sub">Yönetim Paneli</span>
+            <span className="brand-sub">{t('navigation.adminPanel')}</span>
           </div>
         </div>
       </div>
@@ -162,7 +178,7 @@ export default function Sidebar() {
           style={{ color: "#ef4444" }}
         >
           <LogOut size={16} />
-          Çıkış Yap
+          {t('navigation.logout')}
         </button>
       </div>
     </aside>

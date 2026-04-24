@@ -15,8 +15,16 @@
     "login": "Giriş",
     "logout": "Çıkış",
     "updateProduct": "Ürün Güncelleme",
-    "language": "Dil"
+    "language": "Dil",
+    "test": "Test",
+    "updateProcesses": "Güncelleme İşlemleri",
+    "adminPanel": "Yönetim Paneli",
+    "check": "Kontrol",
+    "crmAccount": "CRM Hesabı"
+
+
   },
+  "operationType": "İşlem Türü",
   "login": {
     "title": "Yönetim Paneline Giriş",
     "email": "E-posta",
@@ -25,6 +33,7 @@
     "invalidCredentials": "E-posta veya şifre hatalı",
     "emailRequired": "E-posta gerekli",
     "passwordRequired": "Şifre gerekli"
+
   },
   "productUpdate": {
     "title": "Toplu Ürün Güncelleme",
@@ -50,7 +59,15 @@
     "successful": "başarılı",
     "failed": "hata",
     "processing": "İşleniyor...",
-    "uploadExcel": "Excel Yükle"
+    "uploadExcel": "Excel Yükle",
+    "productIds": "Ürün ID'leri (her satıra veya virgülle ayırın)",
+    "productIdsPlaceholder": "ID-001\nID-002\nveya ID-001, ID-002",
+    "uploadExcelHint": "Excel'den ürün ID'leri ve değerleri yükle (A Sütunu: ID, B Sütunu: Değer)",
+    "idEntered":" ID girildi",
+    "valueMatched": " değer eşleşti",
+    "applyToAll": "Tümüne Uygula",
+    "valueEntered": " değer girildi"
+    
   },
   "errors": {
     "networkError": "Ağ hatası",

@@ -2,6 +2,7 @@ import {useState, FormEvent} from "react";
 import {useNavigate } from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 import {api} from"../api";
+import {useTranslation} from "react-i18next";
 import {Cpu, User,Lock,ArrowRight} from "lucide-react"; //ikon kütüphanesi
 
 export default function LoginPage(){// bu componentı dışarıya aç
@@ -12,6 +13,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
 
     const {login} =useAuth(); // AuthContext'ten login fonksiyonunu al
     const navigate = useNavigate(); // navigate fonksiyonunu al
+    const { t } = useTranslation();
 
 //  şifreyi backend'e gönder → doğruysa token al ve ana sayfaya git → yanlışsa hata göster. 
     const handleSubmit = async (e:FormEvent) => { //formEvent: formun gönderilmesi olayını temsil eder
@@ -27,7 +29,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
             }
             
         }catch (err:any){
-            setError(err.response?.data?.message || "email veya şifre hatalı");
+            setError(err.response?.data?.message || t('login.invalidCredentials'));
         }finally{
             setLoading(false);
         }
@@ -47,7 +49,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
                     </div>
                     <div>
                         <div className="login-title">SAMM ERP</div>
-                        <div className="login-subtitle">Yönetim Paneline Giriş</div>
+                        <div className="login-subtitle">{t('login.title')}</div>
                     </div>
                 </div>
 
@@ -55,7 +57,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label className="form-label">E-posta</label>
+                        <label className="form-label">{t('login.email')}</label>
                         <div style={{ position: 'relative' }}>
                             <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <input
@@ -72,7 +74,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Şifre</label>
+                        <label className="form-label">{t('login.password')}</label>
                         <div style={{ position: 'relative' }}>
                             <Lock size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <input
@@ -94,9 +96,9 @@ export default function LoginPage(){// bu componentı dışarıya aç
                         disabled={loading}
                     >
                         {loading ? (
-                            <><div className="spinner" /> Giriş yapılıyor...</>
+                            <><div className="spinner" /> {t('login.signIn')}...</>
                         ) : (
-                            <>Giriş Yap <ArrowRight size={15} /></>
+                            <>{t('login.signIn')} <ArrowRight size={15} /></>
                         )}
                     </button>
                 </form>
