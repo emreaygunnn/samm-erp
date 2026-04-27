@@ -23,6 +23,7 @@ export  default function OpeationSelector({value,onChange}:Props){
     {value:"stock", label: t('productUpdate.stock'), group:'items'},
     {value: 'location', label: t('productUpdate.location'), group:'items'},
     {value: 'description', label: t('productUpdate.description'), group:'items'},
+    {value: 'status', label: t('productUpdate.status'), group:'items'},
   ]
 
   // grupları sırayla al

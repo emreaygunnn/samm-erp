@@ -8,6 +8,7 @@ const ALLOWED_API_FIELDS: Record<string, string> = {
   stock: "Stock", // frontend 'stock' → Oracle API 'Stock'
   location: "Location", // frontend 'location' → Oracle API 'Location'
   description: "Description", // açıklama (organizasyon koduna göre güncellenecek)
+  status: "Status", // yeni eklenen alan
 };
 
 // güncelleme sonucu değerler

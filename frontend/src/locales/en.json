@@ -34,7 +34,6 @@
   },
   "productUpdate": {
     "title": "Bulk Product Update",
-    "description": "Update multiple products at once",
     "selectOperation": "Select Operation Type",
     "selectIds": "ID List",
     "newValues": "New Values",
@@ -43,6 +42,10 @@
     "stock": "Stock",
     "location": "Location",
     "description": "Description",
+    "status": "Status",
+    "enterNewStatus": "Select new status",
+    "active": "Active",
+    "passive": "Passive",
     "enterNewStock": "Enter new stock quantity",
     "enterNewLocation": "Enter new location",
     "enterNewDescription": "Enter new description",

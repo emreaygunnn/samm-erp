@@ -15,11 +15,12 @@ export default function NewValueInput({operation,items,onItemsChange}:Props){
     const { t } = useTranslation();
     
     
-    const SITUATION_OPTIONS: Record<ProductUpdatableArea,{label:string; type: 'text' |'number' | 'select' ; placeholder?: string }> = {
-        location: {label: t('productUpdate.location'), type:"text", placeholder: t('productUpdate.enterNewLocation')},
-        stock: {label: t('productUpdate.stock'), type:"number", placeholder: t('productUpdate.enterNewStock')},
-        description: {label: t('productUpdate.description'), type:"text", placeholder: t('productUpdate.enterNewDescription')},
-    }
+    const SITUATION_OPTIONS: Record<ProductUpdatableArea, { label: string; type: 'text' | 'number' | 'select'; placeholder?: string }> = {
+      location: { label: t('productUpdate.location'), type: "text", placeholder: t('productUpdate.enterNewLocation') },
+      stock: { label: t('productUpdate.stock'), type: "number", placeholder: t('productUpdate.enterNewStock') },
+      description: { label: t('productUpdate.description'), type: "text", placeholder: t('productUpdate.enterNewDescription') },
+      status: { label: t('productUpdate.status'), type: "select", placeholder: t('productUpdate.enterNewStatus') },
+    };
     
     const cfg = SITUATION_OPTIONS[operation];
 // tümüne uygula için geçici değer
@@ -56,25 +57,21 @@ const handleHandleApply= () => {
     
   // ── "Tümüne Uygula" satırı için input ──
   const renderBulkInput = () => {
-    if (cfg.type === 'select') {
-
-        return null;
-        // SELECT henüz implement edilmedi
-      /* return (
-        {/* <select
+    if (operation === 'status') {
+      return (
+        <select
           className="form-input"
           value={bulkValue}
           onChange={(e) => setBulkValue(e.target.value)}
-          style={{ width: '100%' }}
+          style={{ width: '100%' , color: 'var(--text-primary)', background: 'var(--bg-secondary)'}
+          }
         >
-          <option value="">— Seç —</option>
-          {SITUATION_OPTIONS.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select> }
-      ); */
+          <option value="">{t('productUpdate.enterNewStatus')}</option>
+          <option value="Active">{t('productUpdate.active')}</option>
+          <option value="Passive">{t('productUpdate.passive')}</option>
+        </select>
+      );
     }
-
     return (
       <input
         className="form-input"
@@ -100,7 +97,7 @@ const handleHandleApply= () => {
             className="form-input"
             value={selectedCode || ''}
             onChange={(e) => handleOrganizationCodeChange(item.id, e.target.value as 'A' | 'B' | 'C')}
-            style={{ 
+            style={{
               width: '100%',
               color: 'var(--text-primary)',
               background: 'var(--bg-secondary)',
@@ -126,7 +123,20 @@ const handleHandleApply= () => {
         </div>
       );
     }
-
+    if (operation === 'status') {
+      return (
+        <select
+          className="form-input"
+          value={item.value ?? ''}
+          onChange={(e) => handleItemValueChange(item.id, e.target.value)}
+          style={{ width: '100%' , color: 'var(--text-primary)', background: 'var(--bg-secondary)', colorScheme: 'dark'}}
+        >
+          <option value="">{t('productUpdate.enterNewStatus')}</option>
+          <option value="Active">{t('productUpdate.active')}</option>
+          <option value="Passive">{t('productUpdate.passive')}</option>
+        </select>
+      );
+    }
     const val = String(item.value ?? '');
     return (
       <input

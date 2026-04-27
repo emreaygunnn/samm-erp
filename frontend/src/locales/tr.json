@@ -37,7 +37,6 @@
   },
   "productUpdate": {
     "title": "Toplu Ürün Güncelleme",
-    "description": "Birden fazla ürünü aynı anda güncelleyin",
     "selectOperation": "İşlem Türü Seçiniz",
     "selectIds": "ID Listesi",
     "newValues": "Yeni Değerler",
@@ -46,6 +45,10 @@
     "stock": "Stok",
     "location": "Lokasyon",
     "description": "Açıklama",
+    "status": "Statü",
+    "enterNewStatus": "Yeni statü seçin",
+    "active": "Aktif",
+    "passive": "Pasif",
     "enterNewStock": "Yeni stok adedi girin",
     "enterNewLocation": "Yeni lokasyon girin",
     "enterNewDescription": "Yeni açıklama girin",

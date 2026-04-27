@@ -10,10 +10,12 @@ export interface Product {
 }
 
 // güncellenebilir alanlar
+
 export const PRODUCT_AREA_TYPES = {
   stock: "number",
   location: "string",
   description: "string",
+  status: "string", // yeni eklenen alan
 } as const; //değerler tam literal tiplere dönüşür, yani "string" | "number"
 
 export type ProductUpdatableArea = keyof typeof PRODUCT_AREA_TYPES;
@@ -21,11 +23,11 @@ export type ProductUpdatableArea = keyof typeof PRODUCT_AREA_TYPES;
 //
 
 export interface UpdateItem {
-  //güncellenecek ürün bilgisi
   id: string;
   value: string | number;
-  // açıklama güncellemesi için - organizasyon kodu
   organizationCode?: "A" | "B" | "C";
+  // statü güncellemesi için
+  statusValue?: "Aktif" | "Pasif" | "Active" | "Passive";
 }
 
 export interface UpdateResult {
