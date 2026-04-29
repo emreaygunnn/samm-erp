@@ -8,7 +8,7 @@ import { oracleConfig } from "../config/config.js";
 const ALLOWED_API_FIELDS: Record<string, string> = {
   stock: "Stock", // frontend 'stock' → Oracle API 'Stock'
   location: "Location", // frontend 'location' → Oracle API 'Location'
-  description: "Description", // açıklama (organizasyon koduna göre güncellenecek)
+  itemDescription: "ItemDescription", // açıklama (organizasyon koduna göre güncellenecek)
   status: "Status", // yeni eklenen alan
 };
 
@@ -22,13 +22,18 @@ export class ProductService {
 
   public async updateProduct(
     id: string,
-    fields: Record<string, any>,
+    fields: Record<string, any>
   ): Promise<ProductUpdateResult> {
-    const itemUniqId = await getItem("ItemNumber", id);
+    const itemUniqId = await getItem(
+      "ItemNumber",
+      id,
+      "OrganizationCode",
+      fields.organizationCode
+    );
 
     if (itemUniqId) {
       console.log(
-        `[ProductService] Item ${id} exists with unique ID: ${itemUniqId}`,
+        `[ProductService] Item ${id} exists with unique ID: ${itemUniqId}`
       );
 
       // fields'tan güncellenecek alanları bul (stock, location, description)
@@ -42,7 +47,7 @@ export class ProductService {
       }
 
       console.log(
-        `[ProductService] Güncellenecek alanlar: ${fieldKeys.join(", ")}`,
+        `[ProductService] Güncellenecek alanlar: ${fieldKeys.join(", ")}`
       );
 
       // Her alan için güncelleme yap
@@ -61,15 +66,14 @@ export class ProductService {
         const organizationCode = fields.organizationCode; // organizationCode'u al
 
         console.log(
-          `[ProductService] Güncelleniyor: ${frontendField}=${value} (Org: ${organizationCode})`,
+          `[ProductService] Güncelleniyor: ${frontendField}=${value} (Org: ${organizationCode})`
         );
 
         const updated = await updateItem(
           itemUniqId,
           apiField,
           value,
-          organizationCode,
-          oracleConfig.item,
+          oracleConfig.item
         );
         if (updated) {
           results.push(`${frontendField}: Başarılı`);
@@ -80,7 +84,7 @@ export class ProductService {
 
       const successCount = results.filter((r) => r.includes("Başarılı")).length;
       const hasErrors = results.some(
-        (r) => r.includes("Hata") || r.includes("Geçersiz"),
+        (r) => r.includes("Hata") || r.includes("Geçersiz")
       );
 
       return {
@@ -100,7 +104,7 @@ export class ProductService {
   // toplu güncelleme - paralel olarak çalıştır
 
   public async bulkUpdate(
-    items: Array<{ id: string; [key: string]: any }>,
+    items: Array<{ id: string; [key: string]: any }>
   ): Promise<ProductUpdateResult[]> {
     // Tüm ürünleri paralel olarak işle
     const promises = items.map(async (item) => {

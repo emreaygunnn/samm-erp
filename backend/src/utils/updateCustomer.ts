@@ -1,8 +1,8 @@
 import axios from "axios";
 import getToken from "./getToken.js";
 
-export const updateItem = async (
-  resourceId: string, // product'ta uniqId, customer'da partyNumber — her ikisi de URL'de /{id} olarak kullanılır
+export const updateCustomer = async (
+  partyNumber: string, // product'ta uniqId, customer'da partyNumber — her ikisi de URL'de /{id} olarak kullanılır
   field: string,
   value: string | number,
   baseUrl: string // zorunlu — hangi Oracle endpoint'i kullanılacağı açıkça belirtilmeli
@@ -17,17 +17,20 @@ export const updateItem = async (
       [field]: value,
     };
 
-    console.log(`[updateItem] Gönderiliyor: ${resourceId} - ${field}:`, data);
+    console.log(
+      `[updateCustomer] Gönderiliyor: ${partyNumber} - ${field}:`,
+      data
+    );
 
-    await axios.patch(`${baseUrl}/${resourceId}`, data, {
+    await axios.patch(`${baseUrl}/${partyNumber}`, data, {
       headers: headers,
       timeout: 10000,
     });
 
-    console.log(`[updateItem] Başarılı: ${resourceId} - ${field}`);
+    console.log(`[updateCustomer] Başarılı: ${partyNumber} - ${field}`);
     return true;
   } catch (err: any) {
-    console.log(`[updateItem] Hata ${field}:`, err.message || err);
+    console.log(`[updateCustomer] Hata ${field}:`, err.message || err);
     return false;
   }
 };

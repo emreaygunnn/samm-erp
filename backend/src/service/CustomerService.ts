@@ -1,6 +1,6 @@
 import type { CustomerUpdateResult } from "@shared/types/customer.ts";
-import { updateItem } from "../utils/updateItems.js";
 import { oracleConfig } from "../config/config.js";
+import { updateCustomer } from "src/utils/updateCustomer.js";
 
 // Frontend alan adı → Oracle CRM accounts API alan adı
 const CUSTOMER_FIELDS: Record<string, string> = {
@@ -13,7 +13,7 @@ export class CustomerService {
   // Tek müşteri güncelle
   public async updateCustomer(
     partyNumber: string,
-    fields: Record<string, any>,
+    fields: Record<string, any>
   ): Promise<CustomerUpdateResult> {
     const results: string[] = [];
 
@@ -26,19 +26,18 @@ export class CustomerService {
       }
 
       // Tüm alanlar direkt PATCH /accounts/{partyNumber} ile güncellenir
-      const updated = await updateItem(
+      const updated = await updateCustomer(
         partyNumber,
         apiField,
         value,
-        undefined,
-        oracleConfig.customer,
+        oracleConfig.customer
       );
 
       results.push(`${frontendField}: ${updated ? "Başarılı" : "Hata"}`);
     }
 
     const hasErrors = results.some(
-      (r) => r.includes("Hata") || r.includes("Geçersiz"),
+      (r) => r.includes("Hata") || r.includes("Geçersiz")
     );
     const successCount = results.filter((r) => r.includes("Başarılı")).length;
 
@@ -51,7 +50,7 @@ export class CustomerService {
 
   // Toplu güncelleme — paralel çalışır
   public async bulkUpdate(
-    items: Array<{ id: string; [key: string]: any }>,
+    items: Array<{ id: string; [key: string]: any }>
   ): Promise<CustomerUpdateResult[]> {
     const promises = items.map(async (item) => {
       const { id, ...fields } = item;

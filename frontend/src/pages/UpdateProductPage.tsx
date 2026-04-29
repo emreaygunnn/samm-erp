@@ -6,7 +6,11 @@ import ItemIdInput from "../components/ItemIdInputComponent";
 import NewValueInput from "../components/NewValueInputCompanent";
 import type { FieldConfig } from "../components/NewValueInputCompanent";
 import ResultLog from "../components/ResultLogComponent";
-import type { ProductUpdatableArea, ProductUpdateResult,ProductUpdateItem } from "@shared/types/product";
+import type {
+  ProductUpdatableArea,
+  ProductUpdateResult,
+  ProductUpdateItem,
+} from "@shared/types/product";
 import { RefreshCw } from "lucide-react";
 import { api } from "../api";
 
@@ -14,50 +18,66 @@ export default function ProductUpdatePage() {
   const { t } = useTranslation();
 
   const selectorOptions: SelectorOption<ProductUpdatableArea>[] = [
-    { value: 'stock',       label: t('productUpdate.stock'),       group: t('productUpdate.fieldsGroup') },
-    { value: 'location',    label: t('productUpdate.location'),    group: t('productUpdate.fieldsGroup') },
-    { value: 'description', label: t('productUpdate.description'), group: t('productUpdate.fieldsGroup') },
-    { value: 'status',      label: t('productUpdate.status'),      group: t('productUpdate.fieldsGroup') },
+    {
+      value: "stock",
+      label: t("productUpdate.stock"),
+      group: t("productUpdate.fieldsGroup"),
+    },
+    {
+      value: "location",
+      label: t("productUpdate.location"),
+      group: t("productUpdate.fieldsGroup"),
+    },
+    {
+      value: "description",
+      label: t("productUpdate.description"),
+      group: t("productUpdate.fieldsGroup"),
+    },
+    {
+      value: "status",
+      label: t("productUpdate.status"),
+      group: t("productUpdate.fieldsGroup"),
+    },
   ];
 
   const fieldConfigs: Record<ProductUpdatableArea, FieldConfig> = {
     stock: {
-      type: 'number',
-      label: t('productUpdate.stock'),
-      placeholder: t('productUpdate.enterNewStock'),
+      type: "number",
+      label: t("productUpdate.stock"),
+      placeholder: t("productUpdate.enterNewStock"),
     },
     location: {
-      type: 'text',
-      label: t('productUpdate.location'),
-      placeholder: t('productUpdate.enterNewLocation'),
+      type: "text",
+      label: t("productUpdate.location"),
+      placeholder: t("productUpdate.enterNewLocation"),
     },
     description: {
-      type: 'text-with-code',
-      label: t('productUpdate.description'),
-      placeholder: t('productUpdate.enterNewDescription'),
-      codePlaceholder: t('productUpdate.organizationSelect'),
+      type: "text-with-code",
+      label: t("productUpdate.description"),
+      placeholder: t("productUpdate.enterNewDescription"),
+      codePlaceholder: t("productUpdate.organizationSelect"),
       codeOptions: [
-        { value: 'A', label: t('productUpdate.organizationA') },
-        { value: 'B', label: t('productUpdate.organizationB') },
-        { value: 'C', label: t('productUpdate.organizationC') },
+        { value: "A", label: t("productUpdate.organizationA") },
+        { value: "B", label: t("productUpdate.organizationB") },
+        { value: "SAMM2_DEPO", label: t("productUpdate.organizationC") },
       ],
     },
     status: {
-      type: 'select',
-      label: t('productUpdate.status'),
-      placeholder: t('productUpdate.enterNewStatus'),
+      type: "select",
+      label: t("productUpdate.status"),
+      placeholder: t("productUpdate.enterNewStatus"),
       selectOptions: [
-        { value: 'Active',  label: t('productUpdate.active') },
-        { value: 'Passive', label: t('productUpdate.passive') },
+        { value: "Active", label: t("productUpdate.active") },
+        { value: "Passive", label: t("productUpdate.passive") },
       ],
     },
   };
 
   const itemIdLabels = {
-    sectionTitle:   t('productUpdate.selectIds'),
-    idsLabel:       t('productUpdate.productIds'),
-    idsPlaceholder: t('productUpdate.productIdsPlaceholder'),
-    uploadHint:     t('productUpdate.uploadExcelHint'),
+    sectionTitle: t("productUpdate.selectIds"),
+    idsLabel: t("productUpdate.productIds"),
+    idsPlaceholder: t("productUpdate.productIdsPlaceholder"),
+    uploadHint: t("productUpdate.uploadExcelHint"),
   };
 
   const [operation, setOperation] = useState<ProductUpdatableArea | null>(null);
@@ -72,14 +92,17 @@ export default function ProductUpdatePage() {
   };
 
   const isDescriptionItemFilled = (item: ProductUpdateItem) =>
-    item.organizationCode !== undefined && item.value !== '' && item.value !== undefined && item.value !== null;
+    item.organizationCode !== undefined &&
+    item.value !== "" &&
+    item.value !== undefined &&
+    item.value !== null;
 
   const allValuesFilled =
     items.length > 0 &&
     items.every((item) =>
-      operation === 'description'
+      operation === "description"
         ? isDescriptionItemFilled(item)
-        : item.value !== '' && item.value !== undefined && item.value !== null
+        : item.value !== "" && item.value !== undefined && item.value !== null
     );
 
   const handleUpdate = async () => {
@@ -90,8 +113,12 @@ export default function ProductUpdatePage() {
 
     try {
       const payload = items.map((item) =>
-        operation === 'description'
-          ? { id: item.id, organizationCode: item.organizationCode, description: item.value }
+        operation === "description"
+          ? {
+              id: item.id,
+              organizationCode: item.organizationCode,
+              itemDescription: item.value,
+            }
           : { id: item.id, [operation]: item.value }
       );
 
@@ -105,14 +132,15 @@ export default function ProductUpdatePage() {
     }
   };
 
-  const canSubmit = operation !== null && items.length > 0 && allValuesFilled && !loading;
+  const canSubmit =
+    operation !== null && items.length > 0 && allValuesFilled && !loading;
 
   return (
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">{t('productUpdate.title')}</h2>
-          <p className="page-desc">{t('productUpdate.description')}</p>
+          <h2 className="page-title">{t("productUpdate.title")}</h2>
+          <p className="page-desc">{t("productUpdate.description")}</p>
         </div>
       </div>
 
@@ -121,7 +149,7 @@ export default function ProductUpdatePage() {
           options={selectorOptions}
           value={operation}
           onChange={handleOperationChange}
-          placeholder={t('productUpdate.selectOperation')}
+          placeholder={t("productUpdate.selectOperation")}
         />
 
         <ItemIdInput
@@ -148,9 +176,16 @@ export default function ProductUpdatePage() {
             style={{ minWidth: 160, gap: 8 }}
           >
             {loading ? (
-              <><div className="spinner" /> {t('productUpdate.processing')}</>
+              <>
+                <div className="spinner" /> {t("productUpdate.processing")}
+              </>
             ) : (
-              <><RefreshCw size={15} /> {items.length > 0 ? `${items.length} ${t('productUpdate.updateButton')}` : t('productUpdate.updateButton')}</>
+              <>
+                <RefreshCw size={15} />{" "}
+                {items.length > 0
+                  ? `${items.length} ${t("productUpdate.updateButton")}`
+                  : t("productUpdate.updateButton")}
+              </>
             )}
           </button>
         </div>
