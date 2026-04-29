@@ -1,13 +1,14 @@
 import { CheckCircle, XCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { UpdateResult } from '@shared/types/product';
+import type { ProductUpdateResult } from '@shared/types/product';
 
 interface Props {
-  results: UpdateResult[];
+  results: ProductUpdateResult[];
   loading: boolean;
+  title?: string; // belirtilmezse productUpdate.results anahtarı kullanılır
 }
 
-export default function ResultLog({ results, loading }: Props) {
+export default function ResultLog({ results, loading, title }: Props) {
   const { t } = useTranslation();
   
   if (results.length === 0 && !loading) return null;
@@ -19,7 +20,7 @@ export default function ResultLog({ results, loading }: Props) {
     <div className="card" style={{ padding: '20px 24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          {t('productUpdate.results')}
+          {title ?? t('productUpdate.results')}
         </h3>
         {results.length > 0 && (
           <div style={{ display: 'flex', gap: 10, fontSize: 13 }}>

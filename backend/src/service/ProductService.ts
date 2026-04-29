@@ -1,6 +1,7 @@
-import type { UpdateResult } from "@shared/types/product.ts";
+import type { ProductUpdateResult } from "@shared/types/product.ts";
 import { getItem } from "../utils/getItem.js";
 import { updateItem } from "../utils/updateItems.js";
+import { oracleConfig } from "../config/config.js";
 
 // FRONTEND DEN GELEN ALAN ADI  ORACLE API ALAN ADI EŞLEŞMESİ
 // Sadece izin verilen alanlar
@@ -22,7 +23,7 @@ export class ProductService {
   public async updateProduct(
     id: string,
     fields: Record<string, any>,
-  ): Promise<UpdateResult> {
+  ): Promise<ProductUpdateResult> {
     const itemUniqId = await getItem("ItemNumber", id);
 
     if (itemUniqId) {
@@ -68,6 +69,7 @@ export class ProductService {
           apiField,
           value,
           organizationCode,
+          oracleConfig.item,
         );
         if (updated) {
           results.push(`${frontendField}: Başarılı`);
@@ -99,7 +101,7 @@ export class ProductService {
 
   public async bulkUpdate(
     items: Array<{ id: string; [key: string]: any }>,
-  ): Promise<UpdateResult[]> {
+  ): Promise<ProductUpdateResult[]> {
     // Tüm ürünleri paralel olarak işle
     const promises = items.map(async (item) => {
       const { id, ...fields } = item;

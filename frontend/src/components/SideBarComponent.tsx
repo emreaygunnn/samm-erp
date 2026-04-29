@@ -6,7 +6,7 @@ import {
     LogOut,
     Cpu,
     RefreshCw,
-    FlaskConical,
+    Users,
     ChevronDown,
     Plug,
 
@@ -111,7 +111,11 @@ export default function Sidebar() {
       icon: <RefreshCw size={16} />,
       label: t('navigation.updateProduct'),
     },
-    { to: "/test", icon: <FlaskConical size={16} />, label: t('navigation.test') },
+    {
+      to: "/musteri-guncelle",
+      icon: <Users size={16} />,
+      label: t('navigation.updateCustomer'),
+    },
   ];
   const checkItems: NavItem[] = [
   {

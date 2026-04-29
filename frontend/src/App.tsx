@@ -8,8 +8,8 @@ import { Globe } from 'lucide-react';
 import {useAuth} from  "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
+import CustomerUpdatePage from "./pages/CustomerUpdatePage";
 import Sidebar from "./components/SideBarComponent";
-import TestPage from "./pages/TestPage";""
 
 function App(){
   const { token, user, logout } = useAuth();
@@ -81,9 +81,9 @@ function App(){
         <div className="page-body"> 
           <Routes>
             <Route path="/urun-guncelle" element={<UpdateProductPage />} />
-            <Route path="/test" element={<TestPage />} />
-            <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />// login sayfasına gelirse urun-guncelle sayfasına yönlendirir
-            <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />// her hangi bir url girilirse urun-guncelle sayfasına yönlendirir
+            <Route path="/musteri-guncelle" element={<CustomerUpdatePage />} />
+            <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
+            <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>
         </div>
       </div>

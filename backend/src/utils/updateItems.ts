@@ -1,12 +1,12 @@
 import axios from "axios";
-import { oracleConfig } from "../config/config.js";
 import getToken from "./getToken.js";
 
 export const updateItem = async (
-  uniqId: string,
-  field: string, // dinamik alan adı (stock veya location veya description)
-  value: string | number, //
-  organizationCode?: string, // açıklama güncellemesi için organizasyon kodu
+  resourceId: string, // product'ta uniqId, customer'da partyNumber — her ikisi de URL'de /{id} olarak kullanılır
+  field: string,
+  value: string | number,
+  organizationCode: string | undefined,
+  baseUrl: string, // zorunlu — hangi Oracle endpoint'i kullanılacağı açıkça belirtilmeli
 ) => {
   try {
     const token = getToken();
@@ -18,19 +18,19 @@ export const updateItem = async (
       [field]: value,
     };
 
-    // Eğer açıklama güncellemesi ise organizasyon kodunu da gönder
+    // Description güncellemesinde organizasyon kodu gerekli (product'a özgü)
     if (field === "Description" && organizationCode) {
       data.ORGANIZATION_CODE = organizationCode;
     }
 
-    console.log(`[updateItem] Gönderiliyor: ${uniqId} - ${field}:`, data);
+    console.log(`[updateItem] Gönderiliyor: ${resourceId} - ${field}:`, data);
 
-    const res = await axios.patch(`${oracleConfig.item}/${uniqId}`, data, {
+    await axios.patch(`${baseUrl}/${resourceId}`, data, {
       headers: headers,
-      timeout: 10000, // 10 saniye timeout
+      timeout: 10000,
     });
 
-    console.log(`[updateItem] Başarılı: ${uniqId} - ${field}`);
+    console.log(`[updateItem] Başarılı: ${resourceId} - ${field}`);
     return true;
   } catch (err: any) {
     console.log(`[updateItem] Hata ${field}:`, err.message || err);

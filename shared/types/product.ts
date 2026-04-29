@@ -22,7 +22,7 @@ export type ProductUpdatableArea = keyof typeof PRODUCT_AREA_TYPES;
 // burada önce güncellenebiir alanların keylerini alıyoruz ProductUpdatableArea tipine atıyoruz
 //
 
-export interface UpdateItem {
+export interface ProductUpdateItem {
   id: string;
   value: string | number;
   organizationCode?: "A" | "B" | "C";
@@ -30,7 +30,7 @@ export interface UpdateItem {
   statusValue?: "Aktif" | "Pasif" | "Active" | "Passive";
 }
 
-export interface UpdateResult {
+export interface ProductUpdateResult {
   //güncelleme sonucu
   id: string;
   success: boolean;

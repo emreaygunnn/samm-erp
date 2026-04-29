@@ -6,6 +6,7 @@ import { dirname, join } from "path"; // dosya yolları ile çalışmak için
 import { fileURLToPath } from "url"; // dosya yolları ile çalışmak için
 import authRoutes from "./routes/AuthRoutes.js";
 import productRoutes from "./routes/ProdcutRoutes.js";
+import customerRoutes from "./routes/CustomerRoutes.js";
 
 
 
@@ -20,8 +21,9 @@ app.use(cors());
 app.use(express.json());// gelen json verilerini parse etmek için -req.body deki verileri okur
 
 // route bağlama
-app.use("/auther", authRoutes); // authRoutes içindeki tüm rotalar /auther/login, /auther/register gibi erişilebilir
-app.use("/product", productRoutes); // productRoutes içindeki tüm rotalar /product/getall, /product/getbyid gibi erişilebilir
+app.use("/auther", authRoutes);
+app.use("/product", productRoutes);
+app.use("/customer", customerRoutes);
 
 
 
