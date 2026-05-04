@@ -9,6 +9,7 @@ import {useAuth} from  "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
 import CustomerUpdatePage from "./pages/CustomerUpdatePage";
+import ContactUpdatePage from "./pages/ContactUpdatePage";
 import Sidebar from "./components/SideBarComponent";
 
 function App(){
@@ -82,6 +83,7 @@ function App(){
           <Routes>
             <Route path="/urun-guncelle" element={<UpdateProductPage />} />
             <Route path="/musteri-guncelle" element={<CustomerUpdatePage />} />
+            <Route path="/kisi-guncelle" element={<ContactUpdatePage />} />
             <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
             <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>

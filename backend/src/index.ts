@@ -7,6 +7,7 @@ import { fileURLToPath } from "url"; // dosya yolları ile çalışmak için
 import authRoutes from "./routes/AuthRoutes.js";
 import productRoutes from "./routes/ProdcutRoutes.js";
 import customerRoutes from "./routes/CustomerRoutes.js";
+import contactRoutes from "./routes/ContactRoutes.js";
 
 
 
@@ -24,6 +25,7 @@ app.use(express.json());// gelen json verilerini parse etmek için -req.body dek
 app.use("/auther", authRoutes);
 app.use("/product", productRoutes);
 app.use("/customer", customerRoutes);
+app.use("/contact", contactRoutes);
 
 
 

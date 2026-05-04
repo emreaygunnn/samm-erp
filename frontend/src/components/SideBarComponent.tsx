@@ -7,6 +7,7 @@ import {
     Cpu,
     RefreshCw,
     Users,
+    Contact,
     ChevronDown,
     Plug,
 
@@ -115,6 +116,11 @@ export default function Sidebar() {
       to: "/musteri-guncelle",
       icon: <Users size={16} />,
       label: t('navigation.updateCustomer'),
+    },
+    {
+      to: "/kisi-guncelle",
+      icon: <Contact size={16} />,
+      label: t('navigation.updateContact'),
     },
   ];
   const checkItems: NavItem[] = [
