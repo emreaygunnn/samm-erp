@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
 import CustomerUpdatePage from "./pages/CustomerUpdatePage";
 import ContactUpdatePage from "./pages/ContactUpdatePage";
+import ProfileUpdatePage from "./pages/ProfileUpdatePage";
 import Sidebar from "./components/SideBarComponent";
 
 function App(){
@@ -84,6 +85,7 @@ function App(){
             <Route path="/urun-guncelle" element={<UpdateProductPage />} />
             <Route path="/musteri-guncelle" element={<CustomerUpdatePage />} />
             <Route path="/kisi-guncelle" element={<ContactUpdatePage />} />
+            <Route path="/profil-guncelle" element={<ProfileUpdatePage />} />
             <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
             <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>

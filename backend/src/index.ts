@@ -8,6 +8,7 @@ import authRoutes from "./routes/AuthRoutes.js";
 import productRoutes from "./routes/ProdcutRoutes.js";
 import customerRoutes from "./routes/CustomerRoutes.js";
 import contactRoutes from "./routes/ContactRoutes.js";
+import profileRoutes from "./routes/ProfileRoutes.js";
 
 
 
@@ -26,6 +27,7 @@ app.use("/auther", authRoutes);
 app.use("/product", productRoutes);
 app.use("/customer", customerRoutes);
 app.use("/contact", contactRoutes);
+app.use("/profile", profileRoutes);
 
 
 

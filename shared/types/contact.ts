@@ -1,12 +1,12 @@
 export interface Contact {
   id: string;
   email: string;
-  phoneNumber: string;
+  rawPhoneNumber: string;
   currencyCode: string;
 }
 export const CONTACT_AREA_TYPES = {
   email: "string",
-  phoneNumber: "string",
+  rawPhoneNumber: "string",
   currencyCode: "string",
 } as const;
 

@@ -8,6 +8,7 @@ import {
     RefreshCw,
     Users,
     Contact,
+    CreditCard,
     ChevronDown,
     Plug,
 
@@ -121,6 +122,11 @@ export default function Sidebar() {
       to: "/kisi-guncelle",
       icon: <Contact size={16} />,
       label: t('navigation.updateContact'),
+    },
+    {
+      to: "/profil-guncelle",
+      icon: <CreditCard size={16} />,
+      label: t('navigation.updateProfile'),
     },
   ];
   const checkItems: NavItem[] = [

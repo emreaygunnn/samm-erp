@@ -6,7 +6,7 @@ export const getItem = async (
   key: string,
   value: string,
   key2: string,
-  value2: string
+  value2: string,
 ) => {
   try {
     const token = getToken();
@@ -17,7 +17,7 @@ export const getItem = async (
       `${oracleConfig.item}?q=${key}=${value};${key2}=${value2}`,
       {
         headers: headers,
-      }
+      },
     );
     if (res.data.items.length === 0) {
       console.log(`${key}=${value} not found in Oracle`);
@@ -26,7 +26,7 @@ export const getItem = async (
 
     const selfLink = res.data.items[0].links.find(
       // .links ile her ürün obajesi içerisine array koyar
-      (link: any) => link.rel === "self"
+      (link: any) => link.rel === "self",
     ).href;
 
     const urlParts = selfLink.split("/");

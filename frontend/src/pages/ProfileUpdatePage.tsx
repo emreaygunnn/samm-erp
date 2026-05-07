@@ -6,63 +6,51 @@ import ItemIdInput from "../components/ItemIdInputComponent";
 import NewValueInput from "../components/NewValueInputCompanent";
 import type { FieldConfig } from "../components/NewValueInputCompanent";
 import ResultLog from "../components/ResultLogComponent";
-import type { ContactUpdatableArea, ContactUpdateResult } from "@shared/types/contact";
+import type { ProfileUpdatableArea, ProfileUpdateResult } from "@shared/types/profile";
 import type { ProductUpdateItem } from "@shared/types/product";
 import { RefreshCw } from "lucide-react";
 import { api } from "../api";
 
-export default function ContactUpdatePage() {
+export default function ProfileUpdatePage() {
   const { t } = useTranslation();
 
-  const selectorOptions: SelectorOption<ContactUpdatableArea>[] = [
-    { value: 'email',        label: t('contactUpdate.email'),        group: t('contactUpdate.fieldsGroup') },
-    { value: 'rawPhoneNumber',  label: t('contactUpdate.phoneNumber'),  group: t('contactUpdate.fieldsGroup') },
-    { value: 'currencyCode', label: t('contactUpdate.currencyCode'), group: t('contactUpdate.fieldsGroup') },
+  // Güncelleme operasyonları — şu an sadece creditLimit mevcut
+  const selectorOptions: SelectorOption<ProfileUpdatableArea>[] = [
+    { value: 'creditLimit', label: t('profileUpdate.creditLimit'), group: t('profileUpdate.fieldsGroup') },
   ];
 
-  const fieldConfigs: Record<ContactUpdatableArea, FieldConfig> = {
-    email: {
-      type: 'text',
-      label: t('contactUpdate.email'),
-      placeholder: t('contactUpdate.enterNewEmail'),
-    },
-    rawPhoneNumber: {
-      type: 'text',
-      label: t('contactUpdate.phoneNumber'),
-      placeholder: t('contactUpdate.enterNewPhoneNumber'),
-    },
-    currencyCode: {
-      type: 'select',
-      label: t('contactUpdate.currencyCode'),
-      placeholder: t('contactUpdate.selectCurrencyCode'),
-      selectOptions: [
-        { value: 'TRY', label: 'TRY — Türk Lirası' },
-        { value: 'USD', label: 'USD — Amerikan Doları' },
-        { value: 'EUR', label: 'EUR — Euro' },
-      ],
+  // Her operasyon için input türü — creditLimit sayısal değer alır
+  const fieldConfigs: Record<ProfileUpdatableArea, FieldConfig> = {
+    creditLimit: {
+      type: 'number',
+      label: t('profileUpdate.creditLimit'),
+      placeholder: t('profileUpdate.enterNewCreditLimit'),
     },
   };
 
+  // ItemIdInput bileşenine geçilen etiketler — Account Number'a özgü metinler
   const itemIdLabels = {
-    sectionTitle:        t('contactUpdate.selectIds'),
-    idsLabel:            t('contactUpdate.contactIds'),
-    idsPlaceholder:      t('contactUpdate.contactIdsPlaceholder'),
-    uploadHint:          t('common.uploadExcelHint'),
-    idCountSuffix:       t('contactUpdate.partyNumberCountSuffix'),
-    valueMatchedSuffix:  t('contactUpdate.partyNumberValueMatched'),
+    sectionTitle:       t('profileUpdate.selectIds'),
+    idsLabel:           t('profileUpdate.accountIds'),
+    idsPlaceholder:     t('profileUpdate.accountIdsPlaceholder'),
+    uploadHint:         t('common.uploadExcelHint'),
+    idCountSuffix:      t('profileUpdate.accountCountSuffix'),
+    valueMatchedSuffix: t('profileUpdate.valueMatchedSuffix'),
   };
 
-  const [operation, setOperation] = useState<ContactUpdatableArea | null>(null);
+  const [operation, setOperation] = useState<ProfileUpdatableArea | null>(null);
   const [items, setItems] = useState<ProductUpdateItem[]>([]);
   const [rawText, setRawText] = useState("");
-  const [results, setResults] = useState<ContactUpdateResult[]>([]);
+  const [results, setResults] = useState<ProfileUpdateResult[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleOperationChange = (op: ContactUpdatableArea) => {
+  // Operasyon değişince mevcut değerleri sıfırla
+  const handleOperationChange = (op: ProfileUpdatableArea) => {
     setOperation(op);
     setItems((prev) => prev.map((item) => ({ ...item, value: "" })));
   };
 
+  // Güncelle butonunun aktif olması için tüm item'ların değer girilmiş olması gerekir
   const allValuesFilled =
     items.length > 0 &&
     items.every((item) => item.value !== '' && item.value !== undefined && item.value !== null);
@@ -74,12 +62,14 @@ export default function ContactUpdatePage() {
     setLoading(true);
 
     try {
+      // Payload: [{ id: "ACC-001", creditLimit: 5000 }, ...]
+      // Backend → SOAP XML oluşturur → Oracle ReceivablesCustomerProfileService'e POST atar
       const payload = items.map((item) => ({
         id: item.id,
         [operation]: item.value,
       }));
 
-      const res = await api.patch("/contact/bulk", payload);
+      const res = await api.patch("/profile/bulk", payload);
       const results = Array.isArray(res.data) ? res.data : [res.data];
       setResults(results);
     } catch (err: any) {
@@ -95,19 +85,21 @@ export default function ContactUpdatePage() {
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">{t('contactUpdate.title')}</h2>
-          <p className="page-desc">{t('contactUpdate.description')}</p>
+          <h2 className="page-title">{t('profileUpdate.title')}</h2>
+          <p className="page-desc">{t('profileUpdate.description')}</p>
         </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {/* Adım 1: Operasyon seç (creditLimit) */}
         <OperationSelector
           options={selectorOptions}
           value={operation}
           onChange={handleOperationChange}
-          placeholder={t('contactUpdate.selectOperation')}
+          placeholder={t('profileUpdate.selectOperation')}
         />
 
+        {/* Adım 2: Account Number listesi gir veya Excel yükle */}
         <ItemIdInput
           labels={itemIdLabels}
           items={items}
@@ -116,12 +108,13 @@ export default function ContactUpdatePage() {
           onRawTextChange={setRawText}
         />
 
+        {/* Adım 3: Her Account Number için yeni kredi limiti gir */}
         {operation && items.length > 0 && (
           <NewValueInput
             fieldConfig={fieldConfigs[operation]}
             items={items}
             onItemsChange={setItems}
-            idLabel={t('contactUpdate.partyNumberLabel')}
+            idLabel={t('profileUpdate.accountNumberLabel')}
           />
         )}
 
@@ -133,14 +126,15 @@ export default function ContactUpdatePage() {
             style={{ minWidth: 160, gap: 8 }}
           >
             {loading ? (
-              <><div className="spinner" /> {t('contactUpdate.processing')}</>
+              <><div className="spinner" /> {t('profileUpdate.processing')}</>
             ) : (
-              <><RefreshCw size={15} /> {items.length > 0 ? `${items.length} ${t('contactUpdate.updateButton')}` : t('contactUpdate.updateButton')}</>
+              <><RefreshCw size={15} /> {items.length > 0 ? `${items.length} ${t('profileUpdate.updateButton')}` : t('profileUpdate.updateButton')}</>
             )}
           </button>
         </div>
 
-        <ResultLog results={results} loading={loading} title={t('contactUpdate.results')} />
+        {/* Güncelleme sonuçları — başarılı/hatalı listesi */}
+        <ResultLog results={results} loading={loading} title={t('profileUpdate.results')} />
       </div>
     </div>
   );
