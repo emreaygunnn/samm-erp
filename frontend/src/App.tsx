@@ -1,6 +1,7 @@
 //"Giriş yapmış mı? Yapmışsa şu sayfayı göster, yapmamışsa login'e at."
 
-import {Routes,Route,Navigate} from "react-router-dom"; // Routes → Route'ların kabı. İçindeki Route'lara bakıp URL'e göre hangisini göstereceğine karar verir.
+import {Routes,Route,Navigate} from "react-router-dom";
+import { useState } from 'react'; // Routes → Route'ların kabı. İçindeki Route'lara bakıp URL'e göre hangisini göstereceğine karar verir.
                                                        // Route → Tek bir sayfa tanımı. "Bu URL'e gelince bu component'i göster."
                                                        // Navigate → Otomatik yönlendirme. "Buraya geldin ama seni şuraya atıyorum."
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,9 @@ import ProfileUpdatePage from "./pages/ProfileUpdatePage";
 import Sidebar from "./components/SideBarComponent";
 
 function App(){
-  const { token, user, logout } = useAuth();
+  const { token } = useAuth();
   const { i18n, t } = useTranslation();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleLanguageChange = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -35,10 +37,10 @@ function App(){
   // Giriş yapılmışsa → tam layout
   return (
     <div className="layout">
-       <Sidebar />     
+       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(prev => !prev)} />
       
       <div className="main-content">
-        <header className="header">
+        <header className={`header${sidebarCollapsed ? ' sidebar-hidden' : ''}`}>
           <div className="header-left">
             <h1>{t('common.appName')}</h1>
             <p>{t('navigation.adminPanel')}</p>

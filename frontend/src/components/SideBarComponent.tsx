@@ -1,4 +1,4 @@
-import  { useState } from 'react'; //Menü gruplarının açık/kapalı durumunu tutmak için.
+  import  { useState } from 'react'; //Menü gruplarının açık/kapalı durumunu tutmak için.
 import { NavLink } from 'react-router-dom'; //NavLink → Normal <a> etiketi gibi ama iki farkı var: sayfa yenilenmeden yönlendirir ve aktif sayfanın linkine otomatik active class'ı ekler. Böylece "şu an hangi sayfadayım" görsel olarak belli olur.
 import {useAuth} from '../context/AuthContext'; //logout fonksiyonunu almak için. Çıkış butonunda kullanılacak.
 import {useTranslation} from 'react-i18next';
@@ -103,7 +103,12 @@ function SidebarGroup({ group }: { group: NavGroup }) {
   );
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { logout } = useAuth();
   const { t } = useTranslation();
 
@@ -154,17 +159,18 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-brand">
-        <div className="brand-logo">
-          <div className="brand-icon">
-            <Cpu size={18} color="white" />
-          </div>
-          <div className="brand-text">
-            <span className="brand-name">SAMM ERP</span>
-            <span className="brand-sub">{t('navigation.adminPanel')}</span>
-          </div>
-        </div>
+    <>
+      {/* Sidebar kapalıyken sol üstte beliren yüzen logo butonu */}
+      <div
+        className={`sidebar-float-toggle ${collapsed ? "visible" : ""}`}
+        onClick={onToggle}
+      >
+        <img src="/logo3.png" alt="SAMM ERP" style={{ width: 36, height: 36, objectFit: "contain" }} />
+      </div>
+
+    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      <div className="sidebar-brand" onClick={onToggle}>
+        <img src="/logo3.png" alt="SAMM ERP" style={{ height: 46, width: "auto", objectFit: "contain", display: "block" }} />
       </div>
 
       <nav
@@ -198,5 +204,6 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }
