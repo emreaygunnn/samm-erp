@@ -3,7 +3,7 @@ import {useNavigate } from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 import {api} from"../api";
 import {useTranslation} from "react-i18next";
-import {Cpu, User,Lock,ArrowRight} from "lucide-react"; //ikon kütüphanesi
+import {User,Lock,ArrowRight} from "lucide-react"; //ikon kütüphanesi
 
 export default function LoginPage(){// bu componentı dışarıya aç
     const [email,setEmail]= useState("");
@@ -39,71 +39,76 @@ export default function LoginPage(){// bu componentı dışarıya aç
     
     return (
         <div className="login-page">
-            <div className="login-bg-glow" />
-            <div className="login-bg-glow-2" />
-
-            <div className="login-card">
-                <div className="login-logo">
-                    <div className="login-logo-icon">
-                        <Cpu size={24} color="white" />
-                    </div>
-                    <div>
-                        <div className="login-title">SAMM ERP</div>
-                        <div className="login-subtitle">{t('login.title')}</div>
+            {/* Sol marka paneli */}
+            <div className="login-brand-panel">
+                <div className="login-brand-content">
+                    <img src="/logo3.png" alt="SAMM Logo" className="login-brand-logo" style={{ width: '300px', height: 'auto' }} />
+                    <div className="login-brand-tagline">Enterprise Resource Planning</div>
+                    <div className="login-brand-desc">
+                       
                     </div>
                 </div>
-
-                {error && <div className="form-error">{error}</div>}
-
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">{t('login.email')}</label>
-                        <div style={{ position: 'relative' }}>
-                            <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                            <input
-                                className="form-input"
-                                style={{ paddingLeft: 38 }}
-                                type="email"
-                                placeholder="example@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                autoFocus
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">{t('login.password')}</label>
-                        <div style={{ position: 'relative' }}>
-                            <Lock size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                            <input
-                                className="form-input"
-                                style={{ paddingLeft: 38 }}
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <><div className="spinner" /> {t('login.signIn')}...</>
-                        ) : (
-                            <>{t('login.signIn')} <ArrowRight size={15} /></>
-                        )}
-                    </button>
-                </form>
-
                 
+            </div>
+
+            {/* Sağ form paneli */}
+            <div className="login-form-panel">
+                <div className="login-card">
+                    <div className="login-card-header">
+                        <div className="login-card-title">Hoş Geldiniz</div>
+                        <div className="login-card-subtitle">{t('login.title')}</div>
+                    </div>
+
+                    {error && <div className="form-error">{error}</div>}
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label className="form-label">{t('login.email')}</label>
+                            <div style={{ position: 'relative' }}>
+                                <User size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                                <input
+                                    className="form-input"
+                                    style={{ paddingLeft: 38 }}
+                                    type="email"
+                                    placeholder="example@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">{t('login.password')}</label>
+                            <div style={{ position: 'relative' }}>
+                                <Lock size={15} style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                                <input
+                                    className="form-input"
+                                    style={{ paddingLeft: 38 }}
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <><div className="spinner" /> {t('login.signIn')}...</>
+                            ) : (
+                                <>{t('login.signIn')} <ArrowRight size={15} /></>
+                            )}
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     );
