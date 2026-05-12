@@ -1,5 +1,6 @@
 import type { ProfileUpdateResult } from "@shared/types/profile.ts";
 import { updateProfile } from "../utils/updateProfile.js";
+import { getProfileValue } from "../utils/getProfileValue.js";
 
 // Frontend alan adı → SOAP XML element adı
 const PROFILE_FIELDS: Record<string, string> = {
@@ -37,6 +38,20 @@ export class ProfileService {
       success: !hasErrors && successCount > 0,
       message: results.join(", "),
     };
+  }
+
+  // Mevcut değerleri SOAP üzerinden Oracle'dan çeker (Check butonu için)
+  public async getProfileValues(
+    items: Array<{ id: string }>,
+    operation: string
+  ): Promise<{ id: string; currentValue: string; status: "found" | "not_found" | "error" }[]> {
+    const promises = items.map(async ({ id }) => {
+      const result = await getProfileValue(id, operation);
+      if (result === false)       return { id, currentValue: "", status: "error" as const };
+      if (result === "NOT_FOUND") return { id, currentValue: "", status: "not_found" as const };
+      return { id, currentValue: result, status: "found" as const };
+    });
+    return Promise.all(promises);
   }
 
   // Toplu güncelleme — paralel çalışır

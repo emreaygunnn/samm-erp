@@ -4,6 +4,17 @@ import { ProfileService } from "../service/ProfileService.js";
 const profileService = new ProfileService();
 
 export class ProfileController {
+  // Mevcut değerleri SOAP üzerinden Oracle'dan çeker (Check butonu için)
+  public async getProfileValues(req: Request, res: Response): Promise<void> {
+    const { items, operation } = req.body;
+    try {
+      const results = await profileService.getProfileValues(items, operation);
+      res.json(results);
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  }
+
   public async bulkUpdate(req: Request, res: Response): Promise<void> {
     const items = req.body;
     console.log("[ProfileController] bulkUpdate çağrıldı. Item sayısı:", items?.length);

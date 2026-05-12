@@ -11,7 +11,7 @@ import type {
   ProductUpdateResult,
   ProductUpdateItem,
 } from "@shared/types/product";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Search } from "lucide-react";
 import { api } from "../api";
 
 export default function ProductUpdatePage() {
@@ -85,10 +85,49 @@ export default function ProductUpdatePage() {
   const [rawText, setRawText] = useState("");
   const [results, setResults] = useState<ProductUpdateResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [checkLoading, setCheckLoading] = useState(false);
 
   const handleOperationChange = (op: ProductUpdatableArea) => {
     setOperation(op);
     setItems((prev) => prev.map((item) => ({ ...item, value: "" })));
+  };
+
+  // Oracle'dan mevcut değerleri çekip input'lara doldurur
+  const handleCheck = async () => {
+    if (!operation || items.length === 0) return;
+
+    setCheckLoading(true);
+    try {
+      const payload = {
+        items: items.map((item) => ({
+          id: item.id,
+          ...(item.organizationCode ? { organizationCode: item.organizationCode } : {}),
+        })),
+        operation,
+      };
+      const res = await api.post("/product/values", payload);
+      const values: { id: string; currentValue: string; status: "found" | "not_found" | "error" }[] = res.data;
+      setItems((prev) =>
+        prev.map((item) => {
+          const found = values.find((v) => v.id === item.id && v.status === "found");
+          return found ? { ...item, value: found.currentValue } : item;
+        })
+      );
+      setResults(
+        values.map((v) => ({
+          id: v.id,
+          success: v.status === "found",
+          message:
+            v.status === "found"     ? `${t("common.checkFound")}: ${v.currentValue}` :
+            v.status === "not_found" ? t("common.checkNotFound") :
+                                       t("common.checkError"),
+        }))
+      );
+    } catch (err: any) {
+      setResults([{ id: "-", success: false, message: err.message }]);
+    } finally {
+      setCheckLoading(false);
+    }
   };
 
   const isDescriptionItemFilled = (item: ProductUpdateItem) =>
@@ -123,10 +162,13 @@ export default function ProductUpdatePage() {
       );
 
       const res = await api.patch("/product/bulk", payload);
-      const results = Array.isArray(res.data) ? res.data : [res.data];
-      setResults(results);
+      const raw = Array.isArray(res.data) ? res.data : [res.data];
+      setResults(raw.map((r: ProductUpdateResult) => ({
+        ...r,
+        message: r.success ? t("common.success") : t("common.error"),
+      })));
     } catch (err: any) {
-      setResults([{ id: "-", success: false, message: err.message }]);
+      setResults([{ id: "-", success: false, message: t("common.error") }]);
     } finally {
       setLoading(false);
     }
@@ -168,7 +210,19 @@ export default function ProductUpdatePage() {
           />
         )}
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+          <button
+            className="btn btn-secondary"
+            onClick={handleCheck}
+            disabled={!operation || items.length === 0 || checkLoading || loading}
+            style={{ minWidth: 140, gap: 8 }}
+          >
+            {checkLoading ? (
+              <><div className="spinner" /> {t("common.checking")}</>
+            ) : (
+              <><Search size={15} /> {t("common.check")}</>
+            )}
+          </button>
           <button
             className="btn btn-primary"
             onClick={handleUpdate}

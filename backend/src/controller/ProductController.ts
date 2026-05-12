@@ -18,6 +18,25 @@ export class ProductController {
     }
   }
 
+  // mevcut değerleri çek — check butonu için
+  public async getProductValues(req: Request, res: Response): Promise<void> {
+    const { items, operation } = req.body;
+
+    if (!Array.isArray(items) || !operation) {
+      res
+        .status(400)
+        .json({ success: false, message: "items ve operation gerekli" });
+      return;
+    }
+
+    try {
+      const results = await productService.getProductValues(items, operation);
+      res.json(results);
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  }
+
   // toplu güncelleme
   public async bulkUpdate(req: Request, res: Response): Promise<void> {
     const items = req.body;

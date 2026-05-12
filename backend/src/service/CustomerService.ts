@@ -1,6 +1,7 @@
 import type { CustomerUpdateResult } from "@shared/types/customer.ts";
 import { oracleConfig } from "../config/config.js";
 import { updateCustomer } from "src/utils/updateCustomer.js";
+import { getCustomerValue } from "../utils/getCustomerValue.js";
 
 // Frontend alan adı → Oracle CRM accounts API alan adı
 const CUSTOMER_FIELDS: Record<string, string> = {
@@ -13,7 +14,7 @@ export class CustomerService {
   // Tek müşteri güncelle
   public async updateCustomer(
     partyNumber: string,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Promise<CustomerUpdateResult> {
     const results: string[] = [];
 
@@ -30,14 +31,14 @@ export class CustomerService {
         partyNumber,
         apiField,
         value,
-        oracleConfig.customer
+        oracleConfig.customer,
       );
 
       results.push(`${frontendField}: ${updated ? "Başarılı" : "Hata"}`);
     }
 
     const hasErrors = results.some(
-      (r) => r.includes("Hata") || r.includes("Geçersiz")
+      (r) => r.includes("Hata") || r.includes("Geçersiz"),
     );
     const successCount = results.filter((r) => r.includes("Başarılı")).length;
 
@@ -48,9 +49,31 @@ export class CustomerService {
     };
   }
 
+  // Mevcut değerleri Oracle'dan çeker (Check butonu için)
+  public async getCustomerValues(
+    items: Array<{ id: string }>,
+    operation: string,
+  ): Promise<
+    {
+      id: string;
+      currentValue: string;
+      status: "found" | "not_found" | "error";
+    }[]
+  > {
+    const promises = items.map(async ({ id }) => {
+      const result = await getCustomerValue(id, operation);
+      if (result === false)
+        return { id, currentValue: "", status: "error" as const };
+      if (result === "NOT_FOUND")
+        return { id, currentValue: "", status: "not_found" as const };
+      return { id, currentValue: result, status: "found" as const };
+    });
+    return Promise.all(promises);
+  }
+
   // Toplu güncelleme — paralel çalışır
   public async bulkUpdate(
-    items: Array<{ id: string; [key: string]: any }>
+    items: Array<{ id: string; [key: string]: any }>,
   ): Promise<CustomerUpdateResult[]> {
     const promises = items.map(async (item) => {
       const { id, ...fields } = item;

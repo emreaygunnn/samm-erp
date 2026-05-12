@@ -8,7 +8,7 @@ import type { FieldConfig } from "../components/NewValueInputCompanent";
 import ResultLog from "../components/ResultLogComponent";
 import type { ContactUpdatableArea, ContactUpdateResult } from "@shared/types/contact";
 import type { ProductUpdateItem } from "@shared/types/product";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Search } from "lucide-react";
 import { api } from "../api";
 
 export default function ContactUpdatePage() {
@@ -57,6 +57,7 @@ export default function ContactUpdatePage() {
   const [rawText, setRawText] = useState("");
   const [results, setResults] = useState<ContactUpdateResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [checkLoading, setCheckLoading] = useState(false);
 
   const handleOperationChange = (op: ContactUpdatableArea) => {
     setOperation(op);
@@ -66,6 +67,41 @@ export default function ContactUpdatePage() {
   const allValuesFilled =
     items.length > 0 &&
     items.every((item) => item.value !== '' && item.value !== undefined && item.value !== null);
+
+  // Oracle'dan mevcut değerleri çekip input'lara doldurur
+  const handleCheck = async () => {
+    if (!operation || items.length === 0) return;
+
+    setCheckLoading(true);
+    try {
+      const payload = {
+        items: items.map((item) => ({ id: item.id })),
+        operation,
+      };
+      const res = await api.post("/contact/values", payload);
+      const values: { id: string; currentValue: string; status: "found" | "not_found" | "error" }[] = res.data;
+      setItems((prev) =>
+        prev.map((item) => {
+          const found = values.find((v) => v.id === item.id && v.status === "found");
+          return found ? { ...item, value: found.currentValue } : item;
+        })
+      );
+      setResults(
+        values.map((v) => ({
+          id: v.id,
+          success: v.status === "found",
+          message:
+            v.status === "found"     ? `${t("common.checkFound")}: ${v.currentValue}` :
+            v.status === "not_found" ? t("common.checkNotFound") :
+                                       t("common.checkError"),
+        }))
+      );
+    } catch (err: any) {
+      setResults([{ id: "-", success: false, message: err.message }]);
+    } finally {
+      setCheckLoading(false);
+    }
+  };
 
   const handleUpdate = async () => {
     if (!operation || items.length === 0 || !allValuesFilled) return;
@@ -80,10 +116,13 @@ export default function ContactUpdatePage() {
       }));
 
       const res = await api.patch("/contact/bulk", payload);
-      const results = Array.isArray(res.data) ? res.data : [res.data];
-      setResults(results);
+      const raw = Array.isArray(res.data) ? res.data : [res.data];
+      setResults(raw.map((r: ContactUpdateResult) => ({
+        ...r,
+        message: r.success ? t("common.success") : t("common.error"),
+      })));
     } catch (err: any) {
-      setResults([{ id: "-", success: false, message: err.message }]);
+      setResults([{ id: "-", success: false, message: t("common.error") }]);
     } finally {
       setLoading(false);
     }
@@ -125,7 +164,19 @@ export default function ContactUpdatePage() {
           />
         )}
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+          <button
+            className="btn btn-secondary"
+            onClick={handleCheck}
+            disabled={!operation || items.length === 0 || checkLoading || loading}
+            style={{ minWidth: 140, gap: 8 }}
+          >
+            {checkLoading ? (
+              <><div className="spinner" /> {t("common.checking")}</>
+            ) : (
+              <><Search size={15} /> {t("common.check")}</>
+            )}
+          </button>
           <button
             className="btn btn-primary"
             onClick={handleUpdate}

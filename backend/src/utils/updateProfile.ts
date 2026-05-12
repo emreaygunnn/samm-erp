@@ -1,8 +1,11 @@
 import { callSoap } from "./callSoap.js";
 import { oracleConfig } from "../config/config.js";
 
-const NS_TYP = "http://xmlns.oracle.com/apps/financials/receivables/customers/customerProfileService/types/";
-const NS_CUS = "http://xmlns.oracle.com/apps/financials/receivables/customers/customerProfileService/";
+//kimlik etiketleri namespace
+const NS_TYP =
+  "http://xmlns.oracle.com/apps/financials/receivables/customers/customerProfileService/types/"; //operasyon elementleri
+const NS_CUS =
+  "http://xmlns.oracle.com/apps/financials/receivables/customers/customerProfileService/"; //veri elementleri
 
 export const updateProfile = async (
   accountNumber: string,
@@ -25,7 +28,9 @@ export const updateProfile = async (
 </soapenv:Envelope>`;
 
   try {
-    console.log(`[updateProfile] Güncelleniyor: AccountNumber=${accountNumber}, CreditLimit=${creditLimit}`);
+    console.log(
+      `[updateProfile] Güncelleniyor: AccountNumber=${accountNumber}, CreditLimit=${creditLimit}`,
+    );
     await callSoap(oracleConfig.soap, "updateCustomerProfile", body);
     console.log(`[updateProfile] Başarılı: AccountNumber=${accountNumber}`);
     return true;

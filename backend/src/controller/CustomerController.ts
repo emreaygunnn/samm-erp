@@ -17,13 +17,29 @@ export class CustomerController {
     }
   }
 
+  // Mevcut değerleri Oracle'dan çeker (Check butonu için)
+  public async getCustomerValues(req: Request, res: Response): Promise<void> {
+    const { items, operation } = req.body;
+    try {
+      const results = await customerService.getCustomerValues(items, operation);
+      res.json(results);
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  }
+
   // Toplu güncelleme
   public async bulkUpdate(req: Request, res: Response): Promise<void> {
     const items = req.body;
-    console.log("[CustomerController] bulkUpdate çağrıldı. Item sayısı:", items?.length);
+    console.log(
+      "[CustomerController] bulkUpdate çağrıldı. Item sayısı:",
+      items?.length,
+    );
 
     if (!Array.isArray(items) || items.length === 0) {
-      res.status(400).json({ success: false, message: "Güncellenecek müşteri bulunamadı" });
+      res
+        .status(400)
+        .json({ success: false, message: "Güncellenecek müşteri bulunamadı" });
       return;
     }
 

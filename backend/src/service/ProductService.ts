@@ -1,5 +1,6 @@
 import type { ProductUpdateResult } from "@shared/types/product.ts";
 import { getItem } from "../utils/getItem.js";
+import { getItemValue } from "../utils/getItemValue.js";
 import { updateItem } from "../utils/updateItems.js";
 import { oracleConfig } from "../config/config.js";
 
@@ -22,18 +23,18 @@ export class ProductService {
 
   public async updateProduct(
     id: string,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Promise<ProductUpdateResult> {
     const itemUniqId = await getItem(
       "ItemNumber",
       id,
       "OrganizationCode",
-      fields.organizationCode
+      fields.organizationCode,
     );
 
     if (itemUniqId) {
       console.log(
-        `[ProductService] Item ${id} exists with unique ID: ${itemUniqId}`
+        `[ProductService] Item ${id} exists with unique ID: ${itemUniqId}`,
       );
 
       // fields'tan güncellenecek alanları bul (stock, location, description)
@@ -47,7 +48,7 @@ export class ProductService {
       }
 
       console.log(
-        `[ProductService] Güncellenecek alanlar: ${fieldKeys.join(", ")}`
+        `[ProductService] Güncellenecek alanlar: ${fieldKeys.join(", ")}`,
       );
 
       // Her alan için güncelleme yap
@@ -66,14 +67,14 @@ export class ProductService {
         const organizationCode = fields.organizationCode; // organizationCode'u al
 
         console.log(
-          `[ProductService] Güncelleniyor: ${frontendField}=${value} (Org: ${organizationCode})`
+          `[ProductService] Güncelleniyor: ${frontendField}=${value} (Org: ${organizationCode})`,
         );
 
         const updated = await updateItem(
           itemUniqId,
           apiField,
           value,
-          oracleConfig.item
+          oracleConfig.item,
         );
         if (updated) {
           results.push(`${frontendField}: Başarılı`);
@@ -84,7 +85,7 @@ export class ProductService {
 
       const successCount = results.filter((r) => r.includes("Başarılı")).length;
       const hasErrors = results.some(
-        (r) => r.includes("Hata") || r.includes("Geçersiz")
+        (r) => r.includes("Hata") || r.includes("Geçersiz"),
       );
 
       return {
@@ -101,10 +102,36 @@ export class ProductService {
       };
     }
   }
+  // mevcut değerleri oracle'dan çek — check butonu için
+  public async getProductValues(
+    items: Array<{ id: string; organizationCode?: string }>,
+    operation: string,
+  ): Promise<
+    {
+      id: string;
+      currentValue: string;
+      status: "found" | "not_found" | "error";
+    }[]
+  > {
+    const promises = items.map(async (item) => {
+      const result = await getItemValue(
+        item.id,
+        operation,
+        item.organizationCode,
+      );
+      if (result === false)
+        return { id: item.id, currentValue: "", status: "error" as const };
+      if (result === "NOT_FOUND")
+        return { id: item.id, currentValue: "", status: "not_found" as const };
+      return { id: item.id, currentValue: result, status: "found" as const };
+    });
+    return Promise.all(promises);
+  }
+
   // toplu güncelleme - paralel olarak çalıştır
 
   public async bulkUpdate(
-    items: Array<{ id: string; [key: string]: any }>
+    items: Array<{ id: string; [key: string]: any }>,
   ): Promise<ProductUpdateResult[]> {
     // Tüm ürünleri paralel olarak işle
     const promises = items.map(async (item) => {

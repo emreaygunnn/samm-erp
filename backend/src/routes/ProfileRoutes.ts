@@ -7,6 +7,11 @@ const profileController = new ProfileController();
 
 router.use(securityMiddleware);
 
+// /values spesifik rota, /bulk'tan ÖNCE tanımlanmalı
+router.post("/values", (req, res) => {
+  profileController.getProfileValues(req, res);
+});
+
 router.patch("/bulk", (req, res) => {
   profileController.bulkUpdate(req, res);
 });

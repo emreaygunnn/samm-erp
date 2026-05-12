@@ -7,6 +7,11 @@ const customerController = new CustomerController();
 
 router.use(securityMiddleware); // tüm customer istekleri token kontrolünden geçer
 
+// /values spesifik rota, /:partyNumber'dan ÖNCE tanımlanmalı
+router.post("/values", (req, res) => {
+  customerController.getCustomerValues(req, res);
+});
+
 // /bulk spesifik rota, /:partyNumber'dan ÖNCE tanımlanmalı
 router.patch("/bulk", (req, res) => {
   customerController.bulkUpdate(req, res);

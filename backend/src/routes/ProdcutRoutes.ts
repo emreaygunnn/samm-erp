@@ -8,6 +8,10 @@ const productController = new ProductController();
 router.use(securityMiddleware); //tüm ürün istekleri token kontrolünden geçer
 
 // TOPLAMA: /bulk ÖNCE gelmeliydi, çünkü /:id ile eşleşmeden önce spesifik rotaları yazmak gerekir
+router.post("/values", (req, res) =>
+  productController.getProductValues(req, res),
+);
+
 router.patch("/bulk", (req, res) => {
   productController.bulkUpdate(req, res);
 });
