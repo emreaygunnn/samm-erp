@@ -12,6 +12,9 @@ import UpdateProductPage from "./pages/UpdateProductPage";
 import CustomerUpdatePage from "./pages/CustomerUpdatePage";
 import ContactUpdatePage from "./pages/ContactUpdatePage";
 import ProfileUpdatePage from "./pages/ProfileUpdatePage";
+import CrmAccountCheckPage from "./pages/CrmAccountCheckPage";
+import ContactCheckPage from "./pages/ContactCheckPage";
+import ProfileCheckPage from "./pages/ProfileCheckPage";
 import Sidebar from "./components/SideBarComponent";
 
 function App(){
@@ -88,6 +91,9 @@ function App(){
             <Route path="/musteri-guncelle" element={<CustomerUpdatePage />} />
             <Route path="/kisi-guncelle" element={<ContactUpdatePage />} />
             <Route path="/profil-guncelle" element={<ProfileUpdatePage />} />
+            <Route path="/check" element={<CrmAccountCheckPage />} />
+            <Route path="/contact-check" element={<ContactCheckPage />} />
+            <Route path="/profile-check" element={<ProfileCheckPage />} />
             <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
             <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>

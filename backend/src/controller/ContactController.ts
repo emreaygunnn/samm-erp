@@ -27,6 +27,23 @@ export class ContactController {
     }
   }
 
+  // Kişinin tüm alanlarını döner (Check sayfası için)
+  public async getContactFull(req: Request, res: Response): Promise<void> {
+    const partyNumber = req.params.partyNumber as string;
+    try {
+      const result = await contactService.getContactFull(partyNumber);
+      if (result === "NOT_FOUND") {
+        res.status(404).json({ status: "not_found" });
+        return;
+      }
+      res.json(result);
+    } catch (err: any) {
+      const oracleStatus: number = (err as any).oracleStatus ?? 0;
+      console.error(`[ContactController] getContactFull hatası: Oracle ${oracleStatus} → ${err.message}`);
+      res.status(502).json({ status: "oracle_error", oracleStatus, message: err.message });
+    }
+  }
+
   public async bulkUpdate(req: Request, res: Response): Promise<void> {
     const items = req.body;
     console.log("[ContactController] bulkUpdate çağrıldı. Item sayısı:", items?.length);

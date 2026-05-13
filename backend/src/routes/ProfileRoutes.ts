@@ -7,6 +7,11 @@ const profileController = new ProfileController();
 
 router.use(securityMiddleware);
 
+// /full spesifik rota
+router.get("/full/:accountNumber", (req, res) => {
+  profileController.getProfileFull(req, res);
+});
+
 // /values spesifik rota, /bulk'tan ÖNCE tanımlanmalı
 router.post("/values", (req, res) => {
   profileController.getProfileValues(req, res);

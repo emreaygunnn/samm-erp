@@ -1,6 +1,7 @@
 import type { ContactUpdateResult } from "@shared/types/contact.ts";
 import { updateContact } from "../utils/updateContact.js";
 import { getContactValue } from "../utils/getContactValue.js";
+import { getContactFull } from "../utils/getContactFull.js";
 import { oracleConfig } from "../config/config.js";
 
 // Frontend alan adı → Oracle CRM contacts API alan adı
@@ -69,6 +70,13 @@ export class ContactService {
       return { id, currentValue: result, status: "found" as const };
     });
     return Promise.all(promises);
+  }
+
+  // Kişinin tüm Oracle alanlarını döner (Check sayfası için)
+  public async getContactFull(
+    partyNumber: string
+  ): Promise<Record<string, any> | "NOT_FOUND"> {
+    return getContactFull(partyNumber);
   }
 
   // Toplu güncelleme — paralel çalışır

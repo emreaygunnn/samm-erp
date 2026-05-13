@@ -2,6 +2,7 @@ import type { CustomerUpdateResult } from "@shared/types/customer.ts";
 import { oracleConfig } from "../config/config.js";
 import { updateCustomer } from "src/utils/updateCustomer.js";
 import { getCustomerValue } from "../utils/getCustomerValue.js";
+import { getCustomerFull } from "../utils/getCustomerFull.js";
 
 // Frontend alan adı → Oracle CRM accounts API alan adı
 const CUSTOMER_FIELDS: Record<string, string> = {
@@ -69,6 +70,13 @@ export class CustomerService {
       return { id, currentValue: result, status: "found" as const };
     });
     return Promise.all(promises);
+  }
+
+  // Müşterinin tüm Oracle alanlarını döner (Check sayfası için)
+  public async getCustomerFull(
+    partyNumber: string
+  ): Promise<Record<string, any> | "NOT_FOUND"> {
+    return getCustomerFull(partyNumber);
   }
 
   // Toplu güncelleme — paralel çalışır

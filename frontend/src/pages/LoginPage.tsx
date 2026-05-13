@@ -48,7 +48,7 @@ export default function LoginPage(){// bu componentı dışarıya aç
                        
                     </div>
                 </div>
-                
+                            
             </div>
 
             {/* Sağ form paneli */}

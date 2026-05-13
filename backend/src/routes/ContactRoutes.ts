@@ -7,6 +7,11 @@ const contactController = new ContactController();
 
 router.use(securityMiddleware);
 
+// /full spesifik rota, /:partyNumber'dan ÖNCE tanımlanmalı
+router.get("/full/:partyNumber", (req, res) => {
+  contactController.getContactFull(req, res);
+});
+
 // /values spesifik rota, /:partyNumber'dan ÖNCE tanımlanmalı
 router.post("/values", (req, res) => {
   contactController.getContactValues(req, res);

@@ -28,6 +28,27 @@ export class CustomerController {
     }
   }
 
+  // Müşterinin tüm alanlarını döner (Check sayfası için)
+  public async getCustomerFull(req: Request, res: Response): Promise<void> {
+    const partyNumber = req.params.partyNumber as string;
+    try {
+      const result = await customerService.getCustomerFull(partyNumber);
+      if (result === "NOT_FOUND") {
+        res.status(404).json({ status: "not_found" });
+        return;
+      }
+      res.json(result);
+    } catch (err: any) {
+      const oracleStatus: number = (err as any).oracleStatus ?? 0;
+      console.error(`[CustomerController] getCustomerFull hatası: Oracle ${oracleStatus} → ${err.message}`);
+      res.status(502).json({
+        status: "oracle_error",
+        oracleStatus,
+        message: err.message,
+      });
+    }
+  }
+
   // Toplu güncelleme
   public async bulkUpdate(req: Request, res: Response): Promise<void> {
     const items = req.body;

@@ -39,7 +39,9 @@
     "updateProcesses": "Update Processes",
     "adminPanel": "Admin Panel",
     "check": "Check",
-    "crmAccount": "CRM Account"
+    "crmAccount": "CRM Account",
+    "contactCheck": "Contact",
+    "profileCheck": "Profile"
   },
   "operationType": "Operation Type",
   "login": {
@@ -156,6 +158,45 @@
     "results": "Operation Results",
     "successful": "successful",
     "failed": "failed"
+  },
+  "profileCheck": {
+    "title": "Profile — Query",
+    "description": "Enter an Account Number to view Oracle Receivables profile fields",
+    "inputLabel": "Account Number",
+    "inputPlaceholder": "e.g. ACC-001",
+    "fetchButton": "Query",
+    "fetching": "Querying...",
+    "notFound": "This account was not found in Oracle",
+    "connectionError": "Connection error. Could not reach Oracle SOAP service.",
+    "fieldCount": "{{count}} fields",
+    "colField": "Field",
+    "colValue": "Value"
+  },
+  "contactCheck": {
+    "title": "Contact — Query",
+    "description": "Enter a Party Number to view all contact fields from Oracle",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "e.g. 1234567",
+    "fetchButton": "Query",
+    "fetching": "Querying...",
+    "notFound": "This record was not found in Oracle",
+    "connectionError": "Connection error. Could not reach Oracle.",
+    "fieldCount": "{{count}} fields",
+    "colField": "Field",
+    "colValue": "Value"
+  },
+  "crmAccountCheck": {
+    "title": "CRM Account — Query",
+    "description": "Enter a Party Number to view all customer fields from Oracle",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "e.g. 1234567",
+    "fetchButton": "Query",
+    "fetching": "Querying...",
+    "notFound": "This record was not found in Oracle",
+    "connectionError": "Connection error. Could not reach Oracle.",
+    "fieldCount": "{{count}} fields",
+    "colField": "Field",
+    "colValue": "Value"
   },
   "errors": {
     "networkError": "Network error",

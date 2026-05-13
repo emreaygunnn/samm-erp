@@ -4,7 +4,6 @@ import {useAuth} from '../context/AuthContext'; //logout fonksiyonunu almak içi
 import {useTranslation} from 'react-i18next';
 import {
     LogOut,
-    Cpu,
     RefreshCw,
     Users,
     Contact,
@@ -135,12 +134,22 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
     },
   ];
   const checkItems: NavItem[] = [
-  {
-    to: "/check", // Tıklanınca gideceği URL
-    icon: <Cpu size={16} />, // İstediğin bir ikonu seç
-    label: t('navigation.crmAccount'), // Çeviri dosyasında karşılığını eklemeyi unutma
-  },
-];
+    {
+      to: "/check",
+      icon: <Users size={16} />,
+      label: t('navigation.crmAccount'),
+    },
+    {
+      to: "/contact-check",
+      icon: <Contact size={16} />,
+      label: t('navigation.contactCheck'),
+    },
+    {
+      to: "/profile-check",
+      icon: <CreditCard size={16} />,
+      label: t('navigation.profileCheck'),
+    },
+  ];
 
   const groups: NavGroup[] = [
     {

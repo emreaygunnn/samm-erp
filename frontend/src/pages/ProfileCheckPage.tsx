@@ -1,0 +1,161 @@
+import { useState } from "react";
+import { Search, AlertCircle, CreditCard } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { api } from "../api";
+
+type Status = "idle" | "loading" | "found" | "not_found" | "error";
+
+export default function ProfileCheckPage() {
+  const { t } = useTranslation();
+  const [accountNumber, setAccountNumber] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [data, setData] = useState<Record<string, any> | null>(null);
+  const [errorDetail, setErrorDetail] = useState<string>("");
+
+  const handleFetch = async () => {
+    const id = accountNumber.trim();
+    if (!id) return;
+
+    setStatus("loading");
+    setData(null);
+    setErrorDetail("");
+
+    try {
+      const res = await api.get(`/profile/full/${encodeURIComponent(id)}`);
+      setData(res.data);
+      setStatus("found");
+    } catch (err: any) {
+      if (err.response?.status === 404) {
+        setStatus("not_found");
+      } else {
+        const body = err.response?.data;
+        const detail = body?.message || body?.detail || err.message || "Bilinmeyen hata";
+        const oracleStatus: number = body?.oracleStatus ?? err.response?.status ?? 0;
+        setErrorDetail(`Oracle ${oracleStatus}: ${detail}`);
+        setStatus("error");
+      }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleFetch();
+  };
+
+  const rows = data ? Object.entries(data) : [];
+
+  return (
+    <div>
+      <div className="page-header">
+        <div>
+          <h2 className="page-title">{t("profileCheck.title")}</h2>
+          <p className="page-desc">{t("profileCheck.description")}</p>
+        </div>
+      </div>
+
+      {/* Search Card */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card-body" style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+            <label className="form-label">{t("profileCheck.inputLabel")}</label>
+            <input
+              className="form-input"
+              placeholder={t("profileCheck.inputPlaceholder")}
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={status === "loading"}
+            />
+          </div>
+          <button
+            className="btn btn-primary"
+            onClick={handleFetch}
+            disabled={!accountNumber.trim() || status === "loading"}
+            style={{ height: 42 }}
+          >
+            {status === "loading" ? (
+              <><span className="spinner" /> {t("profileCheck.fetching")}</>
+            ) : (
+              <><Search size={15} /> {t("profileCheck.fetchButton")}</>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Not Found */}
+      {status === "not_found" && (
+        <div className="card">
+          <div className="card-body" style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--warning)" }}>
+            <AlertCircle size={18} />
+            <span><strong>{accountNumber}</strong> — {t("profileCheck.notFound")}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {status === "error" && (
+        <div className="card">
+          <div className="card-body" style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--danger)" }}>
+            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <div>
+              <div>{t("profileCheck.connectionError")}</div>
+              {errorDetail && (
+                <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4, fontFamily: "monospace" }}>
+                  {errorDetail}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Results Table */}
+      {status === "found" && data && (
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <CreditCard size={16} style={{ color: "var(--accent)" }} />
+                {data.AccountNumber ?? accountNumber}
+              </div>
+              <div className="card-subtitle">
+                Account Number: {data.AccountNumber ?? accountNumber}
+                {" — "}
+                {t("profileCheck.fieldCount", { count: rows.length })}
+              </div>
+            </div>
+          </div>
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th style={{ width: "38%" }}>{t("profileCheck.colField")}</th>
+                  <th>{t("profileCheck.colValue")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(([key, value]) => (
+                  <tr key={key}>
+                    <td className="td-muted" style={{ fontFamily: "monospace", fontSize: 12 }}>
+                      {key}
+                    </td>
+                    <td>
+                      {value === null || value === undefined || value === "" ? (
+                        <span style={{ color: "var(--text-muted)", fontSize: 12 }}>—</span>
+                      ) : typeof value === "object" ? (
+                        <span style={{ fontFamily: "monospace", fontSize: 12, color: "var(--text-secondary)" }}>
+                          {JSON.stringify(value)}
+                        </span>
+                      ) : (
+                        String(value)
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

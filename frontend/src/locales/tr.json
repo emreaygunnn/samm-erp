@@ -33,15 +33,15 @@
     "logout": "Çıkış",
     "updateProduct": "Ürün Güncelleme",
     "updateCustomer": "Müşteri Güncelleme",
-    "updateContact": "Kişi Güncelleme",
+    "updateContact": " İlgili Kişi Güncelleme",
     "updateProfile": "Profil Güncelleme",
     "language": "Dil",
     "updateProcesses": "Güncelleme İşlemleri",
     "adminPanel": "Yönetim Paneli",
     "check": "Kontrol",
-    "crmAccount": "CRM Hesabı"
-
-
+    "crmAccount": "CRM Hesabı",
+    "contactCheck": "İlgili Kişi ",
+    "profileCheck": "Profil"
   },
   "operationType": "İşlem Türü",
   "login": {
@@ -159,6 +159,45 @@
     "results": "İşlem Sonuçları",
     "successful": "başarılı",
     "failed": "hata"
+  },
+  "profileCheck": {
+    "title": "Profil — Sorgula",
+    "description": "Account Number girerek Oracle Receivables profil bilgilerini görüntüleyin",
+    "inputLabel": "Account Number",
+    "inputPlaceholder": "Örn: ACC-001",
+    "fetchButton": "Sorgula",
+    "fetching": "Sorgulanıyor...",
+    "notFound": "Bu hesap Oracle'da bulunamadı",
+    "connectionError": "Bağlantı hatası. Oracle SOAP servisine ulaşılamadı.",
+    "fieldCount": "{{count}} alan",
+    "colField": "Alan",
+    "colValue": "Değer"
+  },
+  "contactCheck": {
+    "title": "Kişi — Sorgula",
+    "description": "Party Number girerek Oracle'daki tüm kişi bilgilerini görüntüleyin",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "Örn: 1234567",
+    "fetchButton": "Sorgula",
+    "fetching": "Sorgulanıyor...",
+    "notFound": "Bu kayıt Oracle'da bulunamadı",
+    "connectionError": "Bağlantı hatası. Oracle'a ulaşılamadı.",
+    "fieldCount": "{{count}} alan",
+    "colField": "Alan",
+    "colValue": "Değer"
+  },
+  "crmAccountCheck": {
+    "title": "CRM Hesabı — Sorgula",
+    "description": "Party Number girerek Oracle'daki tüm müşteri bilgilerini görüntüleyin",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "Örn: 1234567",
+    "fetchButton": "Sorgula",
+    "fetching": "Sorgulanıyor...",
+    "notFound": "Bu kayıt Oracle'da bulunamadı",
+    "connectionError": "Bağlantı hatası. Oracle'a ulaşılamadı.",
+    "fieldCount": "{{count}} alan",
+    "colField": "Alan",
+    "colValue": "Değer"
   },
   "errors": {
     "networkError": "Ağ hatası",

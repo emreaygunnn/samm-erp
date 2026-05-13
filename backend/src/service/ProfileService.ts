@@ -1,6 +1,7 @@
 import type { ProfileUpdateResult } from "@shared/types/profile.ts";
 import { updateProfile } from "../utils/updateProfile.js";
 import { getProfileValue } from "../utils/getProfileValue.js";
+import { getProfileFull } from "../utils/getProfileFull.js";
 
 // Frontend alan adı → SOAP XML element adı
 const PROFILE_FIELDS: Record<string, string> = {
@@ -52,6 +53,13 @@ export class ProfileService {
       return { id, currentValue: result, status: "found" as const };
     });
     return Promise.all(promises);
+  }
+
+  // Profilin tüm Oracle alanlarını döner (Check sayfası için)
+  public async getProfileFull(
+    accountNumber: string
+  ): Promise<Record<string, any> | "NOT_FOUND"> {
+    return getProfileFull(accountNumber);
   }
 
   // Toplu güncelleme — paralel çalışır
