@@ -57,9 +57,12 @@ export default function ProductUpdatePage() {
       placeholder: t("productUpdate.enterNewDescription"),
       codePlaceholder: t("productUpdate.organizationSelect"),
       codeOptions: [
-        { value: "A", label: t("productUpdate.organizationA") },
-        { value: "B", label: t("productUpdate.organizationB") },
-        { value: "SAMM2_DEPO", label: t("productUpdate.organizationC") },
+        {
+          value: "MALZEME_ANA_KAYDI",
+          label: t("productUpdate.MalzemeAnaKaydi"),
+        },
+        { value: "GEBZE_DEPO", label: t("productUpdate.GebzeDepo") },
+        { value: "SAMM2_DEPO", label: t("productUpdate.Samm2Depo") },
       ],
     },
     status: {
@@ -101,15 +104,23 @@ export default function ProductUpdatePage() {
       const payload = {
         items: items.map((item) => ({
           id: item.id,
-          ...(item.organizationCode ? { organizationCode: item.organizationCode } : {}),
+          ...(item.organizationCode
+            ? { organizationCode: item.organizationCode }
+            : {}),
         })),
         operation,
       };
-      const res = await api.post("/product/values", payload);
-      const values: { id: string; currentValue: string; status: "found" | "not_found" | "error" }[] = res.data;
+      const res = await api.post("/product/check", payload);
+      const values: {
+        id: string;
+        currentValue: string;
+        status: "found" | "not_found" | "error";
+      }[] = res.data;
       setItems((prev) =>
         prev.map((item) => {
-          const found = values.find((v) => v.id === item.id && v.status === "found");
+          const found = values.find(
+            (v) => v.id === item.id && v.status === "found"
+          );
           return found ? { ...item, value: found.currentValue } : item;
         })
       );
@@ -118,9 +129,11 @@ export default function ProductUpdatePage() {
           id: v.id,
           success: v.status === "found",
           message:
-            v.status === "found"     ? `${t("common.checkFound")}: ${v.currentValue}` :
-            v.status === "not_found" ? t("common.checkNotFound") :
-                                       t("common.checkError"),
+            v.status === "found"
+              ? `${t("common.checkFound")}: ${v.currentValue}`
+              : v.status === "not_found"
+              ? t("common.checkNotFound")
+              : t("common.checkError"),
         }))
       );
     } catch (err: any) {
@@ -160,13 +173,26 @@ export default function ProductUpdatePage() {
             }
           : { id: item.id, [operation]: item.value }
       );
+      // let language: string | null = null;
+      // if (operation === "status") {
+      //   language = await api.post("/product/language", payload);
+      //   if (language == "TR") {
+      //     // 111111111111111111111111111111 statusu alıp TR ise payloaddaki status değerlerini Türkçeye çevir
+      //     payload.forEach((p) => {
+      //       if (p.status === "Active") p.status = "Etkin";
+      //       else if (p.status === "Passive") p.status = "Pasif";
+      //     });
+      //   }
+      // }
 
-      const res = await api.patch("/product/bulk", payload);
+      const res = await api.post("/product/update", payload);
       const raw = Array.isArray(res.data) ? res.data : [res.data];
-      setResults(raw.map((r: ProductUpdateResult) => ({
-        ...r,
-        message: r.success ? t("common.success") : t("common.error"),
-      })));
+      setResults(
+        raw.map((r: ProductUpdateResult) => ({
+          ...r,
+          message: r.success ? t("common.success") : t("common.error"),
+        }))
+      );
     } catch (err: any) {
       setResults([{ id: "-", success: false, message: t("common.error") }]);
     } finally {
@@ -214,13 +240,19 @@ export default function ProductUpdatePage() {
           <button
             className="btn btn-secondary"
             onClick={handleCheck}
-            disabled={!operation || items.length === 0 || checkLoading || loading}
+            disabled={
+              !operation || items.length === 0 || checkLoading || loading
+            }
             style={{ minWidth: 140, gap: 8 }}
           >
             {checkLoading ? (
-              <><div className="spinner" /> {t("common.checking")}</>
+              <>
+                <div className="spinner" /> {t("common.checking")}
+              </>
             ) : (
-              <><Search size={15} /> {t("common.check")}</>
+              <>
+                <Search size={15} /> {t("common.check")}
+              </>
             )}
           </button>
           <button

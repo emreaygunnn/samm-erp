@@ -27,7 +27,7 @@ export interface ProductUpdateItem {
   value: string | number;
   organizationCode?: "A" | "B" | "C";
   // statü güncellemesi için
-  statusValue?: "Aktif" | "Pasif" | "Active" | "Passive";
+  statusValue?: "Etkin" | "Pasif" | "Active" | "Passive";
 }
 
 export interface ProductUpdateResult {

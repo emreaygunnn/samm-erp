@@ -4,9 +4,9 @@ import getToken from "./getToken.js";
 
 // Frontend operasyon adı → Oracle API alan adı
 const ORACLE_FIELDS: Record<string, string> = {
-  stock:       "Stock",
-  location:    "Location",
-  status:      "Status",
+  stock: "Stock",
+  location: "Location",
+  status: "ItemStatusValue",
   description: "ItemDescription",
 };
 
@@ -16,7 +16,7 @@ const ORACLE_FIELDS: Record<string, string> = {
 export const getItemValue = async (
   itemNumber: string,
   operation: string,
-  organizationCode?: string,
+  organizationCode?: string
 ): Promise<string | "NOT_FOUND" | false> => {
   const oracleField = ORACLE_FIELDS[operation];
   if (!oracleField) {
@@ -45,7 +45,11 @@ export const getItemValue = async (
     console.log(`[getItemValue] ${itemNumber} → ${oracleField}: ${value}`);
     return value;
   } catch (err: any) {
-    console.log(`[getItemValue] ${itemNumber} HATA:`, err.response?.status, err.response?.data?.detail || err.message);
+    console.log(
+      `[getItemValue] ${itemNumber} HATA:`,
+      err.response?.status,
+      err.response?.data?.detail || err.message
+    );
     return false;
   }
 };
