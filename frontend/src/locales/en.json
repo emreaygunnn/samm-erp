@@ -41,7 +41,8 @@
     "check": "Check",
     "crmAccount": "CRM Account",
     "contactCheck": "Contact",
-    "profileCheck": "Profile"
+    "profileCheck": "Profile",
+    "addressCheck": "Address"
   },
   "operationType": "Operation Type",
   "login": {
@@ -158,6 +159,20 @@
     "results": "Operation Results",
     "successful": "successful",
     "failed": "failed"
+  },
+  "addressCheck": {
+    "title": "Address — Query",
+    "description": "Enter a Party Number to view all address records from Oracle",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "e.g. 1234567",
+    "fetchButton": "Query",
+    "fetching": "Querying...",
+    "notFound": "No address found for this record",
+    "connectionError": "Connection error. Could not reach Oracle.",
+    "address": "Address",
+    "fieldCount": "{{count}} fields",
+    "colField": "Field",
+    "colValue": "Value"
   },
   "profileCheck": {
     "title": "Profile — Query",

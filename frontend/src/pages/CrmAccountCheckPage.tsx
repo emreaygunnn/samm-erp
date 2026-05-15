@@ -41,7 +41,7 @@ export default function CrmAccountCheckPage() {
     if (e.key === "Enter") handleFetch();
   };
 
-  const rows = data ? Object.entries(data) : [];
+  const rows = data ? Object.entries(data) : []; // Veri varsa, anahtar-değer çiftlerini içeren bir dizi oluşturur. Yoksa boş dizi.""
 
   return (
     <div>

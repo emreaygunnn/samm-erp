@@ -149,6 +149,11 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       icon: <CreditCard size={16} />,
       label: t('navigation.profileCheck'),
     },
+    {
+      to: "/address-check",
+      icon: <Plug size={16} />,
+      label: t('navigation.addressCheck'),
+    },
   ];
 
   const groups: NavGroup[] = [

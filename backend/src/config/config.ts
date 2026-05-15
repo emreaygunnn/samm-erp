@@ -10,6 +10,7 @@ export const oracleConfig = {
     "https://ejwu-test.fa.em2.oraclecloud.com/crmRestApi/resources/11.13.18.05/accounts",
   contact:
     "https://ejwu-test.fa.em2.oraclecloud.com/crmRestApi/resources/11.13.18.05/contacts",
-  soap:
-    "https://ejwu-test.fa.em2.oraclecloud.com/fscmService/ReceivablesCustomerProfileService",
+  soap: "https://ejwu-test.fa.em2.oraclecloud.com/fscmService/ReceivablesCustomerProfileService",
+  adress:
+    "https://ejwu-test.fa.em2.oraclecloud.com/crmRestApi/resources/11.13.18.05/accounts",
 };

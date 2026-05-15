@@ -41,7 +41,8 @@
     "check": "Kontrol",
     "crmAccount": "CRM Hesabı",
     "contactCheck": "İlgili Kişi ",
-    "profileCheck": "Profil"
+    "profileCheck": "Profil",
+    "addressCheck": "Adres"
   },
   "operationType": "İşlem Türü",
   "login": {
@@ -159,6 +160,20 @@
     "results": "İşlem Sonuçları",
     "successful": "başarılı",
     "failed": "hata"
+  },
+  "addressCheck": {
+    "title": "Adres — Sorgula",
+    "description": "Party Number girerek Oracle'daki tüm adres kayıtlarını görüntüleyin",
+    "inputLabel": "Party Number",
+    "inputPlaceholder": "Örn: 1234567",
+    "fetchButton": "Sorgula",
+    "fetching": "Sorgulanıyor...",
+    "notFound": "Bu kayıt için adres bulunamadı",
+    "connectionError": "Bağlantı hatası. Oracle'a ulaşılamadı.",
+    "address": "Adres",
+    "fieldCount": "{{count}} alan",
+    "colField": "Alan",
+    "colValue": "Değer"
   },
   "profileCheck": {
     "title": "Profil — Sorgula",

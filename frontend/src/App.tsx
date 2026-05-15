@@ -16,6 +16,7 @@ import CrmAccountCheckPage from "./pages/CrmAccountCheckPage";
 import ContactCheckPage from "./pages/ContactCheckPage";
 import ProfileCheckPage from "./pages/ProfileCheckPage";
 import Sidebar from "./components/SideBarComponent";
+import AddressCheckPage from "./pages/AddressCheckPage";
 
 function App(){
   const { token } = useAuth();
@@ -94,6 +95,7 @@ function App(){
             <Route path="/check" element={<CrmAccountCheckPage />} />
             <Route path="/contact-check" element={<ContactCheckPage />} />
             <Route path="/profile-check" element={<ProfileCheckPage />} />
+            <Route path="/address-check" element={<AddressCheckPage />} />
             <Route path="/login" element={<Navigate to="/urun-guncelle" replace />} />
             <Route path="*" element={<Navigate to="/urun-guncelle" replace />} />
           </Routes>
