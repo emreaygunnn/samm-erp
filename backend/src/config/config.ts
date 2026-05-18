@@ -13,6 +13,10 @@ export const oracleConfig = {
   soap: "https://ejwu-test.fa.em2.oraclecloud.com/fscmService/ReceivablesCustomerProfileService",
   adress:
     "https://ejwu-test.fa.em2.oraclecloud.com/crmRestApi/resources/11.13.18.05/accounts",
+  salesOrders:
+    "https://ejwu-test.fa.em2.oraclecloud.com/crmRestApi/resources/11.13.18.05/salesOrders",
+  standardReceipts:
+    "https://ejwu-test.fa.em2.oraclecloud.com/fscmRestApi/resources/11.13.18.05/standardReceipts",
 
   report:
     "https://ejwu-test.fa.em2.oraclecloud.com/xmlpserver/services/PublicReportService?WSDL",

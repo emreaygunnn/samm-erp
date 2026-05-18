@@ -22,8 +22,4 @@ router.patch("/bulk", (req, res) => {
   customerController.bulkUpdate(req, res);
 });
 
-router.patch("/:partyNumber", (req, res) => {
-  customerController.updateCustomer(req, res);
-});
-
 export default router;

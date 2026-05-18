@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, AlertCircle, MapPin } from "lucide-react";
+import { AlertCircle, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
+import CheckPageIdInputComponent from "../components/CheckPagesIdInputComponent";
 
 type Status = "idle" | "loading" | "found" | "not_found" | "error";
 
@@ -37,10 +38,6 @@ export default function AddressCheckPage() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleFetch();
-  };
-
   return (
     <div>
       <div className="page-header">
@@ -50,34 +47,13 @@ export default function AddressCheckPage() {
         </div>
       </div>
 
-      {/* Search Card */}
-      <div className="card" style={{ marginBottom: 24 }}>
-        <div className="card-body" style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
-          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-            <label className="form-label">{t("addressCheck.inputLabel")}</label>
-            <input
-              className="form-input"
-              placeholder={t("addressCheck.inputPlaceholder")}
-              value={partyNumber}
-              onChange={(e) => setPartyNumber(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={status === "loading"}
-            />
-          </div>
-          <button
-            className="btn btn-primary"
-            onClick={handleFetch}
-            disabled={!partyNumber.trim() || status === "loading"}
-            style={{ height: 42 }}
-          >
-            {status === "loading" ? (
-              <><span className="spinner" /> {t("addressCheck.fetching")}</>
-            ) : (
-              <><Search size={15} /> {t("addressCheck.fetchButton")}</>
-            )}
-          </button>
-        </div>
-      </div>
+      <CheckPageIdInputComponent
+        namespace="addressCheck"
+        value={partyNumber}
+        onChange={setPartyNumber}
+        onSearch={handleFetch}
+        loading={status === "loading"}
+      />
 
       {/* Not Found */}
       {status === "not_found" && (

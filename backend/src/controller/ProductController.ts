@@ -5,20 +5,6 @@ import { checkLanguage } from "src/service/CheckLanguage.js";
 const productService = new ProductService();
 
 export class ProductController {
-  // tek ürün güncelleme
-  public async updateProduct2(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await productService.updateItem(
-        req.params.id as string,
-        req.body
-      ); // req.params.id → Hangi ürün? "PRD-001"
-      //req.body → Ne güncellenecek? { stock: 50 }
-      res.json(result); // servisten gelen sonucu frontend e gönder
-    } catch (err: any) {
-      res.status(400).json({ success: false, message: err.message });
-    }
-  }
-
   // mevcut değerleri çek — check butonu için
   public async getProduct(req: Request, res: Response): Promise<void> {
     const { items, operation } = req.body;

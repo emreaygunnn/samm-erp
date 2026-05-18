@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, AlertCircle, Contact } from "lucide-react";
+import { AlertCircle, Contact } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
+import CheckPageIdInputComponent from "../components/CheckPagesIdInputComponent";
 
 type Status = "idle" | "loading" | "found" | "not_found" | "error";
 
@@ -37,10 +38,6 @@ export default function ContactCheckPage() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleFetch();
-  };
-
   const rows = data ? Object.entries(data) : [];
 
   return (
@@ -53,33 +50,13 @@ export default function ContactCheckPage() {
       </div>
 
       {/* Search Card */}
-      <div className="card" style={{ marginBottom: 24 }}>
-        <div className="card-body" style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
-          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-            <label className="form-label">{t("contactCheck.inputLabel")}</label>
-            <input
-              className="form-input"
-              placeholder={t("contactCheck.inputPlaceholder")}
-              value={partyNumber}
-              onChange={(e) => setPartyNumber(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={status === "loading"}
-            />
-          </div>
-          <button
-            className="btn btn-primary"
-            onClick={handleFetch}
-            disabled={!partyNumber.trim() || status === "loading"}
-            style={{ height: 42 }}
-          >
-            {status === "loading" ? (
-              <><span className="spinner" /> {t("contactCheck.fetching")}</>
-            ) : (
-              <><Search size={15} /> {t("contactCheck.fetchButton")}</>
-            )}
-          </button>
-        </div>
-      </div>
+      <CheckPageIdInputComponent
+        namespace="contactCheck"
+        value={partyNumber}
+        onChange={setPartyNumber}
+        onSearch={handleFetch}
+        loading={status === "loading"}
+      />
 
       {/* Not Found */}
       {status === "not_found" && (
@@ -161,3 +138,4 @@ export default function ContactCheckPage() {
     </div>
   );
 }
+  

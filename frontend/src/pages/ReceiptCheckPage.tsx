@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { AlertCircle, CreditCard } from "lucide-react";
+import { AlertCircle, Receipt } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
 import CheckPageIdInputComponent from "../components/CheckPagesIdInputComponent";
 
 type Status = "idle" | "loading" | "found" | "not_found" | "error";
 
-export default function ProfileCheckPage() {
+export default function ReceiptCheckPage() {
   const { t } = useTranslation();
-  const [partyNumber, setPartyNumber] = useState("");
+  const [receiptNumber, setReceiptNumber] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [data, setData] = useState<Record<string, any> | null>(null);
   const [errorDetail, setErrorDetail] = useState<string>("");
 
   const handleFetch = async () => {
-    const id = partyNumber.trim();
+    const id = receiptNumber.trim();
     if (!id) return;
 
     setStatus("loading");
@@ -22,7 +22,7 @@ export default function ProfileCheckPage() {
     setErrorDetail("");
 
     try {
-      const res = await api.get(`/profile/full/${encodeURIComponent(id)}`);
+      const res = await api.get(`/receipt/full/${encodeURIComponent(id)}`);
       setData(res.data);
       setStatus("found");
     } catch (err: any) {
@@ -44,15 +44,15 @@ export default function ProfileCheckPage() {
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">{t("profileCheck.title")}</h2>
-          <p className="page-desc">{t("profileCheck.description")}</p>
+          <h2 className="page-title">{t("receiptCheck.title")}</h2>
+          <p className="page-desc">{t("receiptCheck.description")}</p>
         </div>
       </div>
 
       <CheckPageIdInputComponent
-        namespace="profileCheck"
-        value={partyNumber}
-        onChange={setPartyNumber}
+        namespace="receiptCheck"
+        value={receiptNumber}
+        onChange={setReceiptNumber}
         onSearch={handleFetch}
         loading={status === "loading"}
       />
@@ -62,7 +62,7 @@ export default function ProfileCheckPage() {
         <div className="card">
           <div className="card-body" style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--warning)" }}>
             <AlertCircle size={18} />
-            <span><strong>{partyNumber}</strong> — {t("profileCheck.notFound")}</span>
+            <span><strong>{receiptNumber}</strong> — {t("receiptCheck.notFound")}</span>
           </div>
         </div>
       )}
@@ -73,7 +73,7 @@ export default function ProfileCheckPage() {
           <div className="card-body" style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--danger)" }}>
             <AlertCircle size={18} style={{ flexShrink: 0 }} />
             <div>
-              <div>{t("profileCheck.connectionError")}</div>
+              <div>{t("receiptCheck.connectionError")}</div>
               {errorDetail && (
                 <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4, fontFamily: "monospace" }}>
                   {errorDetail}
@@ -90,13 +90,13 @@ export default function ProfileCheckPage() {
           <div className="card-header">
             <div>
               <div className="card-title" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <CreditCard size={16} style={{ color: "var(--accent)" }} />
-                {partyNumber}
+                <Receipt size={16} style={{ color: "var(--accent)" }} />
+                {receiptNumber}
               </div>
               <div className="card-subtitle">
-                Party Number: {partyNumber}
+                Receipt Number: {receiptNumber}
                 {" — "}
-                {t("profileCheck.fieldCount", { count: rows.length })}
+                {t("receiptCheck.fieldCount", { count: rows.length })}
               </div>
             </div>
           </div>
@@ -104,8 +104,8 @@ export default function ProfileCheckPage() {
             <table>
               <thead>
                 <tr>
-                  <th style={{ width: "38%" }}>{t("profileCheck.colField")}</th>
-                  <th>{t("profileCheck.colValue")}</th>
+                  <th style={{ width: "38%" }}>{t("receiptCheck.colField")}</th>
+                  <th>{t("receiptCheck.colValue")}</th>
                 </tr>
               </thead>
               <tbody>

@@ -4,19 +4,6 @@ import { CustomerService } from "../service/CustomerService.js";
 const customerService = new CustomerService();
 
 export class CustomerController {
-  // Tek müşteri güncelleme
-  public async updateCustomer(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await customerService.updateCustomer(
-        req.params.partyNumber as string,
-        req.body,
-      );
-      res.json(result);
-    } catch (err: any) {
-      res.status(400).json({ success: false, message: err.message });
-    }
-  }
-
   // Mevcut değerleri Oracle'dan çeker (Check butonu için)
   public async getCustomerValues(req: Request, res: Response): Promise<void> {
     const { items, operation } = req.body;

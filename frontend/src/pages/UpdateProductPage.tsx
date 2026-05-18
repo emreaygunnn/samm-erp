@@ -173,17 +173,19 @@ export default function ProductUpdatePage() {
             }
           : { id: item.id, [operation]: item.value }
       );
-      // let language: string | null = null;
-      // if (operation === "status") {
-      //   language = await api.post("/product/language", payload);
-      //   if (language == "TR") {
-      //     // 111111111111111111111111111111 statusu alıp TR ise payloaddaki status değerlerini Türkçeye çevir
-      //     payload.forEach((p) => {
-      //       if (p.status === "Active") p.status = "Etkin";
-      //       else if (p.status === "Passive") p.status = "Pasif";
-      //     });
-      //   }
-      // }
+      if (operation === "status") {
+        try {
+          const langRes = await api.post("/product/language");
+          if (langRes.data === "TR") {
+            (payload as any[]).forEach((p) => {
+              if (p.status === "Active") p.status = "Etkin";
+              else if (p.status === "Passive") p.status = "Pasif";
+            });
+          }
+        } catch {
+          // language check başarısız olursa orijinal değerlerle devam et
+        }
+      }
 
       const res = await api.post("/product/update", payload);
       const raw = Array.isArray(res.data) ? res.data : [res.data];
@@ -199,6 +201,13 @@ export default function ProductUpdatePage() {
       setLoading(false);
     }
   };
+
+  const canCheck =
+    operation !== null &&
+    items.length > 0 &&
+    !checkLoading &&
+    !loading &&
+    (operation !== "description" || items.every((item) => !!item.organizationCode));
 
   const canSubmit =
     operation !== null && items.length > 0 && allValuesFilled && !loading;
@@ -240,9 +249,7 @@ export default function ProductUpdatePage() {
           <button
             className="btn btn-secondary"
             onClick={handleCheck}
-            disabled={
-              !operation || items.length === 0 || checkLoading || loading
-            }
+            disabled={!canCheck}
             style={{ minWidth: 140, gap: 8 }}
           >
             {checkLoading ? (

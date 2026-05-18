@@ -4,18 +4,6 @@ import { ContactService } from "../service/ContactService.js";
 const contactService = new ContactService();
 
 export class ContactController {
-  public async updateContact(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await contactService.updateContact(
-        req.params.partyNumber as string,
-        req.body,
-      );
-      res.json(result);
-    } catch (err: any) {
-      res.status(400).json({ success: false, message: err.message });
-    }
-  }
-
   // Mevcut değerleri Oracle'dan çeker (Check butonu için)
   public async getContactValues(req: Request, res: Response): Promise<void> {
     const { items, operation } = req.body;

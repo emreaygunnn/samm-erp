@@ -4,7 +4,7 @@ import { oracleConfig } from "../config/config.js";
 import getToken from "../utils/getToken.js";
 dotenv.config();
 
-const { base64 } = require("../utils/base64");
+import { base64 } from "../utils/base64.js";
 
 export const checkLanguage = async () => {
   const url = oracleConfig.report;

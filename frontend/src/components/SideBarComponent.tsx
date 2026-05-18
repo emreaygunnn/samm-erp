@@ -10,6 +10,8 @@ import {
     CreditCard,
     ChevronDown,
     Plug,
+    ShoppingCart,
+    Receipt,
 
 } from "lucide-react";//ikonalar
 
@@ -153,6 +155,16 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       to: "/address-check",
       icon: <Plug size={16} />,
       label: t('navigation.addressCheck'),
+    },
+    {
+      to: "/order-check",
+      icon: <ShoppingCart size={16} />,
+      label: t('navigation.orderCheck'),
+    },
+    {
+      to: "/receipt-check",
+      icon: <Receipt size={16} />,
+      label: t('navigation.receiptCheck'),
     },
   ];
 

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, AlertCircle, User } from "lucide-react";
+import { AlertCircle, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
+import CheckPageIdInputComponent from "../components/CheckPagesIdInputComponent";
 
 type Status = "idle" | "loading" | "found" | "not_found" | "error";
 
@@ -37,11 +38,7 @@ export default function CrmAccountCheckPage() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleFetch();
-  };
-
-  const rows = data ? Object.entries(data) : []; // Veri varsa, anahtar-değer çiftlerini içeren bir dizi oluşturur. Yoksa boş dizi.""
+  const rows = data ? Object.entries(data) : [];
 
   return (
     <div>
@@ -53,34 +50,13 @@ export default function CrmAccountCheckPage() {
         </div>
       </div>
 
-      {/* Search Card */}
-      <div className="card" style={{ marginBottom: 24 }}>
-        <div className="card-body" style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
-          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-            <label className="form-label">{t("crmAccountCheck.inputLabel")}</label>
-            <input
-              className="form-input"
-              placeholder={t("crmAccountCheck.inputPlaceholder")}
-              value={partyNumber}
-              onChange={(e) => setPartyNumber(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={status === "loading"}
-            />
-          </div>
-          <button
-            className="btn btn-primary"
-            onClick={handleFetch}
-            disabled={!partyNumber.trim() || status === "loading"}
-            style={{ height: 42 }}
-          >
-            {status === "loading" ? (
-              <><span className="spinner" /> {t("crmAccountCheck.fetching")}</>
-            ) : (
-              <><Search size={15} /> {t("crmAccountCheck.fetchButton")}</>
-            )}
-          </button>
-        </div>
-      </div>
+      <CheckPageIdInputComponent
+        namespace="crmAccountCheck"
+        value={partyNumber}
+        onChange={setPartyNumber}
+        onSearch={handleFetch}
+        loading={status === "loading"}
+      />
 
       {/* Not Found */}
       {status === "not_found" && (

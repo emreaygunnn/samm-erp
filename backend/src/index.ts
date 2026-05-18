@@ -10,6 +10,8 @@ import customerRoutes from "./routes/CustomerRoutes.js";
 import contactRoutes from "./routes/ContactRoutes.js";
 import profileRoutes from "./routes/ProfileRoutes.js";
 import addressRoutes from "./routes/AdressRoutes.js";
+import orderRoutes from "./routes/OrderRoutes.js";
+import receiptRoutes from "./routes/ReceiptRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url); // import.meta.url ES modüllerinde mevcut olan, dosyanın URL'ini verir ve fileURLToPath ile dosya yoluna çeviririz
 const __dirname = dirname(__filename); //dirname ile dosya yolunun dizin kısmını alırız
@@ -27,6 +29,8 @@ app.use("/customer", customerRoutes);
 app.use("/contact", contactRoutes);
 app.use("/profile", profileRoutes);
 app.use("/address", addressRoutes);
+app.use("/order", orderRoutes);
+app.use("/receipt", receiptRoutes);
 
 const PORT = process.env.PORT || 3000;
 
